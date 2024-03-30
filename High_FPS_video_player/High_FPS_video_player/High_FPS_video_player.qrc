@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="High_FPS_video_player">
-    </qresource>
+  <qresource prefix="High_FPS_video_player">
+    <file>icons/4375133_logo_youtube_icon.ico</file>
+  </qresource>
 </RCC>

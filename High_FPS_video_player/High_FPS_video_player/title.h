@@ -44,6 +44,8 @@ signals:
 	void sig_ResMaxBtnClicked();
 	// 鼠标移动信号
 	void sig_MoveWindow(QPoint& tempPos);
+	// 向主窗口发射信号触发主窗口鼠标抬起事件
+	void sig_borderExtension(QMouseEvent* event);
 
 public slots:
 	// 关闭按钮对应的槽

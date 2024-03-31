@@ -26,7 +26,7 @@ void Title::paintEvent(QPaintEvent* event)
 void Title::mousePressEvent(QMouseEvent* event)
 {
 	//qDebug() << 1;
-	if (event->button() == Qt::LeftButton)
+	if (event->button() == Qt::LeftButton && event->pos().y() > 4) // 顶部y值在0到4是控制窗口缩放的区域不执行窗口移动
 	{
 		m_moving = true;
 		// 记录鼠标点击的位置
@@ -41,8 +41,16 @@ void Title::mouseReleaseEvent(QMouseEvent* event)
 	if (event->button() == Qt::LeftButton)
 	{
 		m_moving = false;
-		event->accept();
+		//event->accept();
 	}
+	// 向主窗口发射信号（处理通过窗口上边框调整大小时抬起鼠标触发主窗口的mouseReleaseEvent）
+	if (event->button() == Qt::LeftButton)
+	{
+		// 向主窗口发射信号触发主窗口鼠标抬起事件
+		emit sig_borderExtension(event); 
+	}
+
+	return QWidget::mouseReleaseEvent(event);
 }
 
 // 鼠标移动虚函数实现

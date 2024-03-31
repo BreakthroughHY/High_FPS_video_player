@@ -21,6 +21,12 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="Source Files\Qt">
+      <UniqueIdentifier>{bd1c9f52-3c1c-417d-b4cc-f591a412bc71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Qt">
+      <UniqueIdentifier>{2cd5fe97-a276-4708-9495-bbbbeffa7621}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="High_FPS_video_player.qrc">
@@ -29,12 +35,6 @@
     <QtUic Include="High_FPS_video_player.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="High_FPS_video_player.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClCompile Include="High_FPS_video_player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <QtRcc Include="res.qrc">
       <Filter>Translation Files</Filter>
     </QtRcc>
@@ -43,18 +43,33 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="show.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
     <ClCompile Include="title.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="High_FPS_video_player.cpp">
+      <Filter>Source Files\Qt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="title.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="show.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="High_FPS_video_player.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="show.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
     <QtMoc Include="title.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Qt</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

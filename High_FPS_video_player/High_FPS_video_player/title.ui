@@ -110,7 +110,7 @@
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>-</string>
+      <string>—</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -144,7 +144,7 @@
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>o</string>
+      <string>O</string>
      </property>
      <property name="autoDefault">
       <bool>false</bool>
@@ -183,7 +183,7 @@ selection-background-color: rgb(85, 85, 255);
 selection-color: rgb(255, 85, 0);</string>
      </property>
      <property name="text">
-      <string>x</string>
+      <string>X</string>
      </property>
     </widget>
    </item>

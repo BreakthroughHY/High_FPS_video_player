@@ -83,6 +83,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="show.cpp" />
     <ClCompile Include="title.cpp" />
     <QtRcc Include="High_FPS_video_player.qrc" />
     <QtRcc Include="res.qrc" />
@@ -90,10 +91,14 @@
     <QtMoc Include="High_FPS_video_player.h" />
     <ClCompile Include="High_FPS_video_player.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="show.ui" />
     <QtUic Include="title.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="title.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="show.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -108,7 +108,7 @@
           <property name="styleSheet">
            <string notr="true"/>
           </property>
-          <widget class="QWidget" name="CtrlBarWid" native="true">
+          <widget class="CtrBar" name="CtrlBarWid" native="true">
            <property name="geometry">
             <rect>
              <x>0</x>
@@ -130,7 +130,7 @@
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">background-color: rgba(0, 90, 0, 128);</string>
+            <string notr="true"/>
            </property>
           </widget>
          </widget>
@@ -182,6 +182,12 @@
    <class>Show</class>
    <extends>QWidget</extends>
    <header>show.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CtrBar</class>
+   <extends>QWidget</extends>
+   <header>ctr_bar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

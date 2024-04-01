@@ -2,4 +2,7 @@
     <qresource prefix="/icons">
         <file>icons/2040887.jpg</file>
     </qresource>
+    <qresource prefix="/iconFont">
+        <file>font/iconfont.ttf</file>
+    </qresource>
 </RCC>

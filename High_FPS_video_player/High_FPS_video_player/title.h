@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QFontDatabase>
 #include "ui_title.h"
 
 
@@ -13,6 +14,9 @@ class Title : public QWidget
 public:
 	Title(QWidget *parent = nullptr);
 	~Title();
+
+	// 获取窗口最大化的状态
+	bool getMaximize();
 
 protected:
 	// 绘制虚函数实现
@@ -64,17 +68,17 @@ private:
 	QPoint m_lastPos;
 	// 窗口没有最大化时的宽度
 	int NonMaximizeWidth;
+	// 字体图标
+	QFont fontIcon;
 
 	const QString btnEnter = "background-color: rgb(47, 49, 52);\
 												color: rgb(255, 255, 255);\
-												font-size: 20px;\
 												text-align: center;\
 												line-height: 32px;\
 												border-radius: 5px;";
 
 	const QString btnLeave = "background-color: rgb(30, 32, 34);\
 												color: rgb(255, 255, 255);\
-												font-size: 20px;\
 												text-align: center;\
 												line-height: 32px;\
 												border-radius: 5px;";

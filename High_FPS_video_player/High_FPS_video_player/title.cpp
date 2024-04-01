@@ -15,6 +15,9 @@ Title::Title(QWidget *parent)
 Title::~Title()
 {}
 
+// 获取窗口最大化的状态
+bool Title::getMaximize() { return this->maximize; };
+
 // 绘制虚函数实现
 void Title::paintEvent(QPaintEvent* event)
 {
@@ -65,6 +68,7 @@ void Title::mouseMoveEvent(QMouseEvent* event)
 			maximize = false; // 结束最大化
 			m_lastPos.setX(m_lastPos.x() * NonMaximizeWidth / this->width());
 			emit sig_ResMaxBtnClicked(); // 发射结束最大化的信号
+			ui.btnMax->setText(QChar(0xe65d));
 		}
 		// 移动操作
 		emit sig_MoveWindow(targetPos);
@@ -85,9 +89,9 @@ void Title::setStyle()
 
 	ui.videoName->setStyleSheet("background-color: rgb(30, 32, 34);\
 													  color: rgb(255, 255, 255);");
-	ui.btnClose->setStyleSheet(btnLeave);
-	ui.btnMax->setStyleSheet(btnLeave);
-	ui.btnMin->setStyleSheet(btnLeave);
+	ui.btnClose->setStyleSheet(btnLeave + "font-size: 23px;");
+	ui.btnMax->setStyleSheet(btnLeave + "font-size: 16px;");
+	ui.btnMin->setStyleSheet(btnLeave + "font-size: 15px;");
 
 
 	// 委托事件
@@ -95,7 +99,21 @@ void Title::setStyle()
 	ui.btnMax->installEventFilter(this);
 	ui.btnMin->installEventFilter(this);
 
-	ui.btnClose->setFlat(true);
+	//ui.btnClose->setFlat(true);
+
+	// 加载自定义字体文件
+	int fontId = QFontDatabase::addApplicationFont(":/iconFont/font/iconfont.ttf");
+	QString fontName = QFontDatabase::applicationFontFamilies(fontId).at(0);
+	fontIcon.setFamily(fontName);
+	//fontIcon.setPointSize(9);
+	/*ui.videoName->setFont(fontIcon);
+	ui.videoName->setText(QChar(0xe570));*/
+	ui.btnMin->setFont(fontIcon);
+	ui.btnMin->setText(QChar(0xe956));
+	ui.btnMax->setFont(fontIcon);
+	ui.btnMax->setText(QChar(0xe65d));
+	ui.btnClose->setFont(fontIcon);
+	ui.btnClose->setText(QChar(0xe611));
 }
 
 
@@ -105,33 +123,33 @@ bool Title::eventFilter(QObject* watched, QEvent* event)
     {
         if (event->type() == QEvent::Enter)
         {
-            ui.btnClose->setStyleSheet(btnEnter);
+            ui.btnClose->setStyleSheet(btnEnter + "font-size: 23px;");
         }
         else if (event->type() == QEvent::Leave)
         {
-            ui.btnClose->setStyleSheet(btnLeave);
+            ui.btnClose->setStyleSheet(btnLeave + "font-size: 23px;");
         }
     }
     else if (watched == ui.btnMax)
 	{
 		if (event->type() == QEvent::Enter)
 		{
-			ui.btnMax->setStyleSheet(btnEnter);
+			ui.btnMax->setStyleSheet(btnEnter + "font-size: 16px;");
 		}
 		else if (event->type() == QEvent::Leave)
 		{
-			ui.btnMax->setStyleSheet(btnLeave);
+			ui.btnMax->setStyleSheet(btnLeave + "font-size: 16px;");
 		}
 	}
 	else if (watched == ui.btnMin)
 	{
 		if (event->type() == QEvent::Enter)
 		{
-			ui.btnMin->setStyleSheet(btnEnter);
+			ui.btnMin->setStyleSheet(btnEnter + "font-size: 15px;");
 		}
 		else if (event->type() == QEvent::Leave)
 		{
-			ui.btnMin->setStyleSheet(btnLeave);
+			ui.btnMin->setStyleSheet(btnLeave + "font-size: 15px;");
 		}
 	}
 
@@ -160,12 +178,14 @@ void Title::do_maxBtnClicked()
 	{
 		maximize = false;
 		emit sig_ResMaxBtnClicked();
+		ui.btnMax->setText(QChar(0xe65d));
 	}
 	else
 	{
 		maximize = true;
 		NonMaximizeWidth = this->width();
 		emit sig_MaxBtnClicked();
+		ui.btnMax->setText(QChar(0xe692));
 	}
 }
 // 最小化按钮对应的槽

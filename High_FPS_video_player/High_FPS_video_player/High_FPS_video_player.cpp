@@ -10,9 +10,11 @@ High_FPS_video_player::High_FPS_video_player(QWidget *parent)
     // 样式
     setStyle();
     // 设置鼠标追踪   在鼠标未按下时也能检测鼠标移动
-    centralWidget()->setMouseTracking(true); // 启用中心窗口的鼠标跟踪
+    //centralWidget()->setMouseTracking(true); // 启用中心窗口的鼠标跟踪
+
     qApp->installEventFilter(this); // 在主窗口类内安装事件过滤器
 
+    // 连接信号和槽
     connectSignalSlots();
     //QCursor cursor(Qt::SizeBDiagCursor); // 使用十字光标
     //setCursor(cursor);
@@ -67,48 +69,54 @@ bool High_FPS_video_player::eventFilter(QObject* obj, QEvent* event)
         QPoint globalPos = mouseEvent->globalPos(); // 获取全局坐标
         QPoint curPos = mapFromGlobal(globalPos); // 将全局坐标转换为相对于窗口的坐标
         // 窗口缩放处理(函数内处理的是鼠标样式的变化和判断当前鼠标位置是否具备改变窗口大小条件)
-        winZoom(curPos);
 
-        if (winZoomStatus.reSizeIng)
+        
+        // 窗口最大化时禁止进行窗口大小拖拽
+        if (!ui.TitleWid->getMaximize())
         {
-            QPoint curPoint = mouseEvent->globalPosition().toPoint();
-            switch (winZoomStatus.mouseBorderStatu)
+            winZoom(curPos);
+
+            if (winZoomStatus.reSizeIng)
             {
-            case 0b1000:    // 上
-                borderExtension(curPoint, 0b1000);
-                break;
-            case 0b0100:    // 右
-                borderExtension(curPoint, 0b0100);
-                break;
-            case 0b0010:    // 下
-                borderExtension(curPoint, 0b0010);
-                break;
-            case 0b0001:    // 左
-                borderExtension(curPoint, 0b0001);
-                break;
-            case 0b1100:    // 右上
-                borderExtension(curPoint, 0b1000);
-                borderExtension(curPoint, 0b0100);
-                break;
-            case 0b0110:    // 右下
-                borderExtension(curPoint, 0b0100);
-                borderExtension(curPoint, 0b0010);
-                break;
-            case 0b0011:    // 左下
-                borderExtension(curPoint, 0b0010);
-                borderExtension(curPoint, 0b0001);
-                break;
-            case 0b1001:    // 左上
-                borderExtension(curPoint, 0b0001);
-                borderExtension(curPoint, 0b1000);
-                break;
-            default:
-                break;
+                QPoint curPoint = mouseEvent->globalPosition().toPoint();
+                switch (winZoomStatus.mouseBorderStatu)
+                {
+                case 0b1000:    // 上
+                    borderExtension(curPoint, 0b1000);
+                    break;
+                case 0b0100:    // 右
+                    borderExtension(curPoint, 0b0100);
+                    break;
+                case 0b0010:    // 下
+                    borderExtension(curPoint, 0b0010);
+                    break;
+                case 0b0001:    // 左
+                    borderExtension(curPoint, 0b0001);
+                    break;
+                case 0b1100:    // 右上
+                    borderExtension(curPoint, 0b1000);
+                    borderExtension(curPoint, 0b0100);
+                    break;
+                case 0b0110:    // 右下
+                    borderExtension(curPoint, 0b0100);
+                    borderExtension(curPoint, 0b0010);
+                    break;
+                case 0b0011:    // 左下
+                    borderExtension(curPoint, 0b0010);
+                    borderExtension(curPoint, 0b0001);
+                    break;
+                case 0b1001:    // 左上
+                    borderExtension(curPoint, 0b0001);
+                    borderExtension(curPoint, 0b1000);
+                    break;
+                default:
+                    break;
+                }
+                // 将新的窗口数据设置给窗口
+                setGeometry(curGeometry);
+                // 设置新的鼠标位置
+                winZoomStatus.clickPoin = curPoint;
             }
-            // 将新的窗口数据设置给窗口
-            setGeometry(curGeometry);
-            // 设置新的鼠标位置
-            winZoomStatus.clickPoin = curPoint;
         }
     }
 

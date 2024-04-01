@@ -7,14 +7,34 @@
     <x>0</x>
     <y>0</y>
     <width>792</width>
-    <height>504</height>
+    <height>611</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Show</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="REOpenGLWidget" name="openGLWidget">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>170</y>
+     <width>300</width>
+     <height>200</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>REOpenGLWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>REOpenGLWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

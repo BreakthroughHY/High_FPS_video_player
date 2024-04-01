@@ -52,12 +52,21 @@
     <ClCompile Include="High_FPS_video_player.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
+    <ClCompile Include="REOpenGLWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctr_bar.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="title.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="show.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ctr_bar.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -71,5 +80,13 @@
     <QtMoc Include="title.h">
       <Filter>Header Files\Qt</Filter>
     </QtMoc>
+    <QtMoc Include="ctr_bar.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="REOpenGLWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

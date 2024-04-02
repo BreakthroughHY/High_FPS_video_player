@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ctr_bar.cpp" />
+    <ClCompile Include="helper.cpp" />
     <ClCompile Include="REOpenGLWidget.cpp" />
     <ClCompile Include="show.cpp" />
     <ClCompile Include="title.cpp" />
@@ -112,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ctr_bar.h" />
+    <ClInclude Include="helper.h" />
     <ClInclude Include="REOpenGLWidget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

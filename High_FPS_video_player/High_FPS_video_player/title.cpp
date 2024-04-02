@@ -80,24 +80,24 @@ void Title::mouseMoveEvent(QMouseEvent* event)
 // 样式
 void Title::setStyle()
 {
-	ui.logo->setStyleSheet("background-color: rgb(30, 32, 34);color: rgb(78, 194, 145); ");
-	ui.logo->setEnabled(false);
-	ui.logo->setFlat(true);
-	QFont font = ui.logo->font();
-	font.setBold(true);
-	ui.logo->setFont(font);
+	//ui.logo->setStyleSheet("background-color: rgb(30, 32, 34);color: rgb(78, 194, 145); ");
+	//ui.logo->setEnabled(false);
+	//ui.logo->setFlat(true);
+	//QFont font = ui.logo->font();
+	//font.setBold(true);
+	//ui.logo->setFont(font);
 
-	ui.videoName->setStyleSheet("background-color: rgb(30, 32, 34);\
-													  color: rgb(255, 255, 255);");
-	ui.btnClose->setStyleSheet(btnLeave + "font-size: 23px;");
-	ui.btnMax->setStyleSheet(btnLeave + "font-size: 16px;");
-	ui.btnMin->setStyleSheet(btnLeave + "font-size: 15px;");
+	//ui.videoName->setStyleSheet("background-color: rgb(30, 32, 34);\
+	//												  color: rgb(255, 255, 255);");
+	//ui.btnClose->setStyleSheet(btnLeave + "font-size: 23px;");
+	//ui.btnMax->setStyleSheet(btnLeave + "font-size: 16px;");
+	//ui.btnMin->setStyleSheet(btnLeave + "font-size: 15px;");
 
 
-	// 委托事件
-	ui.btnClose->installEventFilter(this);
-	ui.btnMax->installEventFilter(this);
-	ui.btnMin->installEventFilter(this);
+	//// 委托事件
+	//ui.btnClose->installEventFilter(this);
+	//ui.btnMax->installEventFilter(this);
+	//ui.btnMin->installEventFilter(this);
 
 	//ui.btnClose->setFlat(true);
 
@@ -119,7 +119,7 @@ void Title::setStyle()
 
 bool Title::eventFilter(QObject* watched, QEvent* event)
 {
-    if (watched == ui.btnClose)
+    /*if (watched == ui.btnClose)
     {
         if (event->type() == QEvent::Enter)
         {
@@ -151,7 +151,7 @@ bool Title::eventFilter(QObject* watched, QEvent* event)
 		{
 			ui.btnMin->setStyleSheet(btnLeave + "font-size: 15px;");
 		}
-	}
+	}*/
 
     return QWidget::eventFilter(watched, event);
 }

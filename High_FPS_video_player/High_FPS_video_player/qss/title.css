@@ -1,0 +1,29 @@
+* {
+	border-radius: 5px;
+    background-color: rgb(30, 32, 34);
+	border: none;
+    color: white;
+}
+
+QPushButton#logo {
+	background-color: rgb(30, 32, 34);
+    color:  rgb(78, 194, 145);
+	font: 22px;
+	font-weight: bold;
+}
+
+QPushButton#btnMin {
+	font: 14px;
+}
+QPushButton#btnMax {
+	font: 16px;
+	font-weight: bold;
+}
+QPushButton#btnClose {
+	font: 23px;
+}
+
+QPushButton:hover {
+    background-color:  rgb(47, 49, 52);
+	color: rgb(78, 194, 145);
+}

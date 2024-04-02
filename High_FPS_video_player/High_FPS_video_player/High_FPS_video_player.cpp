@@ -136,6 +136,10 @@ bool High_FPS_video_player::eventFilter(QObject* obj, QEvent* event)
 // 样式
 void High_FPS_video_player::setStyle()
 {
+    ui.TitleWid->setStyleSheet(Helper::loadQssStr(":/qss/qss/title.css"));
+
+    ui.CtrlBarWid->setStyleSheet(Helper::loadQssStr(":/qss/qss/ctr_bar.css"));
+    
 }
 
 // 连接信号和槽
@@ -152,6 +156,8 @@ void High_FPS_video_player::connectSignalSlots()
     connect(ui.TitleWid, &Title::sig_MoveWindow, this, &High_FPS_video_player::do_MoveWindow);
     // 连接title和主窗口的鼠标抬起事件
     connect(ui.TitleWid, &Title::sig_borderExtension, this, &High_FPS_video_player::mouseReleaseEvent);
+    // 连接ShowWid和主窗口的设置CtrlBarWid位置的函数
+    connect(ui.ShowWid, &Show::sig_setCtrlBarWidPos, this, &High_FPS_video_player::setCtrlBarWidPos);
 }
 
 // 窗口缩放处理(函数内处理的是鼠标样式的变化和判断当前鼠标位置是否具备改变窗口大小条件)
@@ -265,6 +271,12 @@ void High_FPS_video_player::borderExtension(QPoint& curPoint, int flag)
     }
 }
 
+// CtrlBarWid位置和大小设置函数，show中无法访问CtrlBarWid所有在这里设置
+void High_FPS_video_player::setCtrlBarWidPos()
+{
+    ui.CtrlBarWid->setGeometry(0, ui.ShowWid->height() - 72, ui.ShowWid->width(), 72);
+}
+
 // 大小改变虚函数
 void High_FPS_video_player::resizeEvent(QResizeEvent* event)
 {
@@ -276,9 +288,6 @@ void High_FPS_video_player::resizeEvent(QResizeEvent* event)
     {
         ui.PlaylistWid->show();
     }
-    ui.CtrlBarWid->setGeometry(0, ui.ShowWid->height() - 72, ui.ShowWid->width(), 72);
-
-    //ui.label
 
     ui.CtrlBarWid->raise();
 }

@@ -5,7 +5,7 @@
 
 typedef struct WinZoomStatus {
     //bool onTop = false, onRight = false, onBottom = false, onLeft = false;
-    int mouseBorderStatu = 11;
+    int mouseBorderStatu = 11; // 数据是进行按位运算的  0b1011
     bool reSize = false; // 鼠标位置是否可改变窗口大小
     bool reSizeIng = false; // 鼠标位置正在改变窗口大小
     bool mouseIsArrow = true; // 记录鼠标状态，防止恢复鼠标时多次执行
@@ -40,6 +40,8 @@ private:
     void winZoom(QPoint& curPos);
     // 处理四个边的扩展
     void borderExtension(QPoint& curPoint, int flag);
+    // CtrlBarWid位置和大小设置函数，show中无法访问CtrlBarWid所有在这里设置
+    void setCtrlBarWidPos();
     // 大小改变虚函数
     void resizeEvent(QResizeEvent* event) override;
     

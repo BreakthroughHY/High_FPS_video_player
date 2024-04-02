@@ -5,4 +5,8 @@
     <qresource prefix="/iconFont">
         <file>font/iconfont.ttf</file>
     </qresource>
+    <qresource prefix="/qss">
+        <file>qss/title.css</file>
+        <file>qss/ctr_bar.css</file>
+    </qresource>
 </RCC>

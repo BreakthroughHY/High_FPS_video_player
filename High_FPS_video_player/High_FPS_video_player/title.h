@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QFontDatabase>
+#include "helper.h"
 #include "ui_title.h"
 
 

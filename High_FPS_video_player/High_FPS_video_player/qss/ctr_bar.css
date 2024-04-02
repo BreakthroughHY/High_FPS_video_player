@@ -1,0 +1,22 @@
+* {
+	border-radius: 5px;
+    background-color: transparent;
+	border: none;
+    color:white;
+}
+
+QPushButton#PlayOrPauseBtn {
+	font: 20px;
+}
+
+QPushButton#VolumeBtn {
+	font: 22px;
+}
+
+QPushButton#FullScreenBtn {
+	font: 22px;
+}
+
+QPushButton:hover {
+	color: rgb(78, 194, 145);
+}

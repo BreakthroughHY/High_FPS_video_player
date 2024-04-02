@@ -4,6 +4,13 @@ Show::Show(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+
+	QSlider* slider = new QSlider(Qt::Vertical, this);
+	slider->setRange(0, 100); // 设置范围
+	slider->setStyleSheet("QSlider::groove:horizontal {border: 1px solid #4A708B;background: #C0C0C0;height: 3px;border - radius: 2px;padding - left:-1px;padding - right:-1px;}");
+	slider->setGeometry(50, 150, 30, 100);
+
+	slider->show();
 }
 
 Show::~Show()
@@ -13,7 +20,7 @@ Show::~Show()
 void Show::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
-	painter.fillRect(event->rect(), QColor(255, 132, 0)); // 设置背景颜色为浅灰色
+	painter.fillRect(event->rect(), QColor(0, 0, 0));
 }
 
 // 大小改变虚函数
@@ -32,4 +39,13 @@ void Show::resizeEvent(QResizeEvent* event)
 		int openGLW = h * WdividedH;
 		ui.openGLWidget->setGeometry((w - openGLW) / 2, 0, openGLW, h);
 	}
+
+	// 向主窗口发信号设置CtrlBarWid位置
+	emit sig_setCtrlBarWidPos();
+}
+
+// 鼠标移动虚函数实现
+void Show::mouseMoveEvent(QMouseEvent* event)
+{
+	qDebug() << event->pos();
 }

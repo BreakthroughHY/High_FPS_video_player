@@ -61,6 +61,12 @@
     <ClCompile Include="helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="playl_list_wid.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="re_QSlider.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="title.ui">
@@ -70,6 +76,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ctr_bar.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="playl_list_wid.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -86,6 +95,9 @@
     <QtMoc Include="ctr_bar.h">
       <Filter>Header Files\Qt</Filter>
     </QtMoc>
+    <QtMoc Include="playl_list_wid.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="REOpenGLWidget.h">
@@ -93,6 +105,9 @@
     </ClInclude>
     <ClInclude Include="helper.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="re_QSlider.h">
+      <Filter>Header Files\Qt</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

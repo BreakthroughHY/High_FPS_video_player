@@ -18,7 +18,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QSlider" name="horizontalSlider">
+    <widget class="ReQSlider" name="PlaySlider">
      <property name="maximumSize">
       <size>
        <width>16777215</width>
@@ -246,6 +246,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ReQSlider</class>
+   <extends>QSlider</extends>
+   <header>re_QSlider.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

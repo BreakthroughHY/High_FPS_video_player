@@ -139,6 +139,8 @@ void High_FPS_video_player::setStyle()
     ui.TitleWid->setStyleSheet(Helper::loadQssStr(":/qss/qss/title.css"));
 
     ui.CtrlBarWid->setStyleSheet(Helper::loadQssStr(":/qss/qss/ctr_bar.css"));
+
+    ui.ShowWid->setStyleSheet(Helper::loadQssStr(":/qss/qss/show.css"));
     
 }
 
@@ -158,6 +160,14 @@ void High_FPS_video_player::connectSignalSlots()
     connect(ui.TitleWid, &Title::sig_borderExtension, this, &High_FPS_video_player::mouseReleaseEvent);
     // 连接ShowWid和主窗口的设置CtrlBarWid位置的函数
     connect(ui.ShowWid, &Show::sig_setCtrlBarWidPos, this, &High_FPS_video_player::setCtrlBarWidPos);
+
+
+    // 组件连接组件
+    // ctr_bar中的播放空间大小改变发射信号连接show中的设置声音滑块位置的槽函数
+    connect(ui.CtrlBarWid, &CtrBar::sig_SetVolumeSliderPos, ui.ShowWid, &Show::do_SetVolumeSliderPos);
+    // show的通知ctr_bar发送位置信息的信号可以发射了
+    connect(ui.ShowWid, &Show::sig_SetVolumeSliderPos, ui.CtrlBarWid, &CtrBar::do_SetVolumeSliderPos);
+
 }
 
 // 窗口缩放处理(函数内处理的是鼠标样式的变化和判断当前鼠标位置是否具备改变窗口大小条件)

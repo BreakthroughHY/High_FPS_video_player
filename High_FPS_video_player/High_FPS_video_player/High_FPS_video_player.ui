@@ -136,7 +136,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="PlaylistWid" native="true">
+         <widget class="PlaylListWid" name="PlaylistWid" native="true">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -159,7 +159,7 @@
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(23, 24, 27);</string>
+           <string notr="true"/>
           </property>
          </widget>
         </item>
@@ -188,6 +188,12 @@
    <class>CtrBar</class>
    <extends>QWidget</extends>
    <header>ctr_bar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PlaylListWid</class>
+   <extends>QWidget</extends>
+   <header>playl_list_wid.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -6,10 +6,12 @@
 }
 
 QPushButton#logo {
+	padding-left: 20px;
 	background-color: rgb(30, 32, 34);
     color:  rgb(78, 194, 145);
 	font: 22px;
 	font-weight: bold;
+
 }
 
 QPushButton#btnMin {

@@ -8,5 +8,6 @@
     <qresource prefix="/qss">
         <file>qss/title.css</file>
         <file>qss/ctr_bar.css</file>
+        <file>qss/show.css</file>
     </qresource>
 </RCC>

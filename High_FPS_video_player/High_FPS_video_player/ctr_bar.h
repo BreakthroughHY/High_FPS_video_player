@@ -18,6 +18,8 @@ public:
 protected:
 	// 绘制虚函数实现
 	void paintEvent(QPaintEvent* event) override;
+	// 大小改变虚函数
+	void resizeEvent(QResizeEvent* event) override;
 
 private:
 	// 样式
@@ -25,9 +27,15 @@ private:
 	// 连接信号和槽
 	void connectSignalSlots();
 
+signals:
+	// 设置音量滑块位置的信号
+	void sig_SetVolumeSliderPos(int x);
+
 public slots:
 	// 播放和暂停按钮对应的槽
 	void do_PlayOrPauseBtnClicked();
+	// 处理来自show的设置音量滑块位置的信号
+	void do_SetVolumeSliderPos();
 
 private:
 	// 字体图标

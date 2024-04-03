@@ -73,7 +73,7 @@
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -92,7 +92,9 @@
   <ItemGroup>
     <ClCompile Include="ctr_bar.cpp" />
     <ClCompile Include="helper.cpp" />
+    <ClCompile Include="playl_list_wid.cpp" />
     <ClCompile Include="REOpenGLWidget.cpp" />
+    <ClCompile Include="re_QSlider.cpp" />
     <ClCompile Include="show.cpp" />
     <ClCompile Include="title.cpp" />
     <QtRcc Include="High_FPS_video_player.qrc" />
@@ -102,6 +104,7 @@
     <QtMoc Include="High_FPS_video_player.h" />
     <ClCompile Include="High_FPS_video_player.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="playl_list_wid.ui" />
     <QtUic Include="show.ui" />
     <QtUic Include="title.ui" />
   </ItemGroup>
@@ -112,8 +115,10 @@
     <QtMoc Include="show.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="re_QSlider.h" />
     <QtMoc Include="ctr_bar.h" />
     <ClInclude Include="helper.h" />
+    <QtMoc Include="playl_list_wid.h" />
     <ClInclude Include="REOpenGLWidget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

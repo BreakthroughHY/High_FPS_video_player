@@ -9,6 +9,7 @@ CtrBar::CtrBar(QWidget *parent)
 	setStyle();
 	// 连接信号和槽
 	connectSignalSlots();
+
 }
 
 CtrBar::~CtrBar()
@@ -29,6 +30,11 @@ void CtrBar::paintEvent(QPaintEvent* event)
 	painter.fillRect(event->rect(), gradient);
 }
 
+// 大小改变虚函数
+void CtrBar::resizeEvent(QResizeEvent* event)
+{
+}
+
 void CtrBar::setStyle()
 {
 	// 加载自定义字体文件
@@ -36,11 +42,11 @@ void CtrBar::setStyle()
 	QString fontName = QFontDatabase::applicationFontFamilies(fontId).at(0);
 	fontIcon.setFamily(fontName);
 
-	QString tempStr = "background-color: rgba(0, 0, 0, 0);\
+	/*QString tempStr = "background-color: rgba(0, 0, 0, 0);\
 																			color: rgb(255, 255, 255);\
 																			border: none;\
 																			selection-background-color: transparent;\
-																			selection-color: rgb(255, 255, 255);";
+																			selection-color: rgb(255, 255, 255);";*/
 
 	/*ui.VideoPlayTimeTimeEdit->setStyleSheet(tempStr);
 
@@ -96,4 +102,12 @@ void CtrBar::do_PlayOrPauseBtnClicked()
 		playing = true;
 		ui.PlayOrPauseBtn->setText(QChar(0xe694));
 	}
+}
+
+// 处理来自show的设置音量滑块位置的信号
+void CtrBar::do_SetVolumeSliderPos()
+{
+	// 向show发信号设置音量滑块位置
+	emit sig_SetVolumeSliderPos(ui.VolumeBtn->pos().x());
+	qDebug() << ui.VolumeBtn->pos().x();
 }

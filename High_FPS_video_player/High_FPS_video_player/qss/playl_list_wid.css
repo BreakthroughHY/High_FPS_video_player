@@ -1,0 +1,27 @@
+* {
+	border: 0;
+	background-color: rgb(23, 24, 27);
+	color: rgb(255, 255, 255);
+	font: 20px;
+}
+
+QScrollBar:vertical { 
+	background-color: rgb(23, 24, 27);
+	width: 8px;
+}
+/*设置滑块样式*/
+QScrollBar::handle:vertical { 
+	background-color: rgb(46, 48, 52);
+	border-radius: 4px;
+}
+/*隐藏滑块上下的按钮*/
+QScrollBar::sub-line:vertical { height: 0; subcontrol-position: top; }
+QScrollBar::add-line:vertical { height: 0; subcontrol-position: bottom; }
+/*设置轨道的颜色*/
+QScrollBar::add-page:vertical { background-color: rgb(23, 24, 27); }
+QScrollBar::sub-page:vertical { background-color: rgb(23, 24, 27); }
+/*设置设置鼠标经过滑块滑块的颜色*/
+QScrollBar::handle:vertical:hover
+{
+	background: #555555;
+}

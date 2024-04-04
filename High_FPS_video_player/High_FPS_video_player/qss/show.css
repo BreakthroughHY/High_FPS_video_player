@@ -18,6 +18,10 @@ QPushButton#btnCloseVideoList {
 	font: 20px;
 }
 
+QPushButton#btnCloseVideoList:hover {
+	background-color: rgba(0, 0, 0, 150);
+}
+
 /*»¬¸Í*/
 QSlider::groove:vertical {
 	background: rgba(204, 204, 204, 128);

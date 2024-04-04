@@ -9,5 +9,6 @@
         <file>qss/title.css</file>
         <file>qss/ctr_bar.css</file>
         <file>qss/show.css</file>
+        <file>qss/playl_list_wid.css</file>
     </qresource>
 </RCC>

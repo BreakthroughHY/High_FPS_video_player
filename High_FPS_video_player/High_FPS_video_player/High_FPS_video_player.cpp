@@ -14,12 +14,22 @@ High_FPS_video_player::High_FPS_video_player(QWidget *parent)
 
     qApp->installEventFilter(this); // 在主窗口类内安装事件过滤器
 
+    // 定时器对象指针  (要在连接槽函数之前创建计时器对象)
+    ctr_barTimer = new QTimer(this);
+    // 定时精度
+    ctr_barTimer->setTimerType(Qt::PreciseTimer);
+    // 定时间隔
+    ctr_barTimer->setInterval(1000);
+    // 设置单次计时
+    ctr_barTimer->setSingleShot(true);
+
     // 连接信号和槽
     connectSignalSlots();
-    //QCursor cursor(Qt::SizeBDiagCursor); // 使用十字光标
-    //setCursor(cursor);
+    
+    // 隐藏CtrlBarWid
+    ui.CtrlBarWid->hide();
 
-
+    //setWindowState(Qt::WindowFullScreen);
 }
 
 High_FPS_video_player::~High_FPS_video_player()
@@ -70,7 +80,6 @@ bool High_FPS_video_player::eventFilter(QObject* obj, QEvent* event)
         QPoint curPos = mapFromGlobal(globalPos); // 将全局坐标转换为相对于窗口的坐标
         // 窗口缩放处理(函数内处理的是鼠标样式的变化和判断当前鼠标位置是否具备改变窗口大小条件)
 
-        
         // 窗口最大化时禁止进行窗口大小拖拽
         if (!ui.TitleWid->getMaximize())
         {
@@ -118,15 +127,46 @@ bool High_FPS_video_player::eventFilter(QObject* obj, QEvent* event)
                 winZoomStatus.clickPoin = curPoint;
             }
         }
+        // 处理鼠标进入窗口事件
+        // 进入title下方
+        if (curPos.y() >= ui.TitleWid->height())
+        {
+            // 向show发信号显示btnCloseVideoList
+            emit sig_showbtnCloseVideoList();
+            // 进入show
+            if (curPos.x() < ui.ShowWid->width())
+            {
+                ctr_barDisplay = true;
+                ui.CtrlBarWid->show();
+                if (curPos.y() > height() - ui.CtrlBarWid->height())
+                {
+                    ctr_barTimer->stop();
+                }
+                else
+                {
+                    ctr_barTimer->start();
+                }
+            }
+            else
+            {
+                if (ctr_barDisplay)
+                {
+                    ctr_barDisplay = false;
+                    ctr_barTimer->stop();
+                    ui.CtrlBarWid->hide();
+                }
+            }
+        }
     }
 
-    // 处理鼠标移动的事件
+    // 处理鼠标抬起的事件
     if (event->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
         if (winZoomStatus.reSizeIng && mouseEvent->button() == Qt::LeftButton)
         {
             winZoomStatus.reSizeIng = false;
+            ctr_barTimer->start();
         }
     }
 
@@ -141,6 +181,8 @@ void High_FPS_video_player::setStyle()
     ui.CtrlBarWid->setStyleSheet(Helper::loadQssStr(":/qss/qss/ctr_bar.css"));
 
     ui.ShowWid->setStyleSheet(Helper::loadQssStr(":/qss/qss/show.css"));
+
+    ui.PlaylistWid->setStyleSheet(Helper::loadQssStr(":/qss/qss/playl_list_wid.css"));
     
 }
 
@@ -160,13 +202,21 @@ void High_FPS_video_player::connectSignalSlots()
     connect(ui.TitleWid, &Title::sig_borderExtension, this, &High_FPS_video_player::mouseReleaseEvent);
     // 连接ShowWid和主窗口的设置CtrlBarWid位置的函数
     connect(ui.ShowWid, &Show::sig_setCtrlBarWidPos, this, &High_FPS_video_player::setCtrlBarWidPos);
+    // ctr_bar信号通过主窗口中转到show
+    connect(ui.CtrlBarWid, &CtrBar::sig_SetVolumeSliderShowHide, this, &High_FPS_video_player::sig_SetVolumeSliderShowHide);
+    connect(this, &High_FPS_video_player::sig_SetVolumeSliderShowHide, ui.ShowWid, &Show::do_TimeoutShowVolumeWid);
+    // 窗口鼠标在title下方移动的信号发给show设置btnCloseVideoList可见
+    connect(this, &High_FPS_video_player::sig_showbtnCloseVideoList, ui.ShowWid, &Show::do_TimeoutShowBtnVideoList);
+    // 
+    connect(ui.ShowWid, &Show::sig_videoListShowHide, this, &High_FPS_video_player::do_videoListShowHide);
 
+    // 自己连自己
+    // 连接ctr_bar对应的定时器和隐藏槽函数
+    connect(this->ctr_barTimer, &QTimer::timeout, this, &High_FPS_video_player::do_TimeoutHideCtr_bar);
 
     // 组件连接组件
     // ctr_bar中的播放空间大小改变发射信号连接show中的设置声音滑块位置的槽函数
     connect(ui.CtrlBarWid, &CtrBar::sig_SetVolumeSliderPos, ui.ShowWid, &Show::do_SetVolumeSliderPos);
-    // show的通知ctr_bar发送位置信息的信号可以发射了
-    connect(ui.ShowWid, &Show::sig_SetVolumeSliderPos, ui.CtrlBarWid, &CtrBar::do_SetVolumeSliderPos);
 
 }
 
@@ -290,20 +340,59 @@ void High_FPS_video_player::setCtrlBarWidPos()
 // 大小改变虚函数
 void High_FPS_video_player::resizeEvent(QResizeEvent* event)
 {
-    if (height() < 600 || width() < 980)
+    if (!hiddenVideoList)
     {
-        ui.PlaylistWid->hide();
-    }
-    else
-    {
-        ui.PlaylistWid->show();
+        if (height() < 600 || width() < 980)
+        {
+            ui.PlaylistWid->hide();
+        }
+        else
+        {
+            ui.PlaylistWid->show();
+        }
     }
 
+    // 设置为父窗口的最前面
     ui.CtrlBarWid->raise();
+}
+
+// 鼠标离开窗口触发的事件
+void High_FPS_video_player::leaveEvent(QEvent* event) {
+    if (event->type() == QEvent::Leave) {
+        // 鼠标离开窗口是如果没有开启ctr_bar对应的计时器就开起
+        if (ctr_barDisplay)
+        {
+            ctr_barTimer->stop();
+            ui.CtrlBarWid->hide();
+        }
+    }
 }
 
 // 处理窗口移动的槽函数
 void High_FPS_video_player::do_MoveWindow(QPoint& tempPos)
 {
     this->move(tempPos);
+}
+
+// 显示ctr_bar
+void High_FPS_video_player::do_TimeoutHideCtr_bar()
+{
+    ctr_barDisplay = false;
+    ui.CtrlBarWid->hide();
+}
+
+// 视频列表隐藏和显示
+void High_FPS_video_player::do_videoListShowHide(bool flag)
+{
+    if (flag)
+    {
+        hiddenVideoList = true;
+        ui.PlaylistWid->hide();
+    }
+    else
+    {
+        hiddenVideoList = false;
+        ui.PlaylistWid->show();
+    }
+
 }

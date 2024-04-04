@@ -10,6 +10,8 @@ CtrBar::CtrBar(QWidget *parent)
 	// 连接信号和槽
 	connectSignalSlots();
 
+	// 音频控件进行事件过滤器
+	ui.VolumeBtn->installEventFilter(this);
 }
 
 CtrBar::~CtrBar()
@@ -30,9 +32,36 @@ void CtrBar::paintEvent(QPaintEvent* event)
 	painter.fillRect(event->rect(), gradient);
 }
 
+// 窗口位置改变的虚函数
+void CtrBar::moveEvent(QMoveEvent* event)
+{
+	// 向show发信号设置音量滑块位置
+	emit sig_SetVolumeSliderPos(ui.VolumeBtn->pos().x());
+}
+
 // 大小改变虚函数
 void CtrBar::resizeEvent(QResizeEvent* event)
 {
+	// 向show发信号设置音量滑块位置
+	emit sig_SetVolumeSliderPos(ui.VolumeBtn->pos().x());
+}
+
+// 事件过滤器虚函数
+bool CtrBar::eventFilter(QObject* obj, QEvent* event)
+{
+	if (obj == ui.VolumeBtn)
+	{
+		if (event->type() == QEvent::Enter)
+		{
+			emit sig_SetVolumeSliderShowHide(true);
+		}
+		else if (event->type() == QEvent::Leave)
+		{
+			emit sig_SetVolumeSliderShowHide(false);
+		}
+	}
+
+	return QWidget::eventFilter(obj, event);
 }
 
 void CtrBar::setStyle()
@@ -42,44 +71,12 @@ void CtrBar::setStyle()
 	QString fontName = QFontDatabase::applicationFontFamilies(fontId).at(0);
 	fontIcon.setFamily(fontName);
 
-	/*QString tempStr = "background-color: rgba(0, 0, 0, 0);\
-																			color: rgb(255, 255, 255);\
-																			border: none;\
-																			selection-background-color: transparent;\
-																			selection-color: rgb(255, 255, 255);";*/
-
-	/*ui.VideoPlayTimeTimeEdit->setStyleSheet(tempStr);
-
-	ui.VideoTotalTimeTimeEdit->setStyleSheet(tempStr);
-
-	ui.label->setStyleSheet("background-color: transparent;\
-																			color: rgb(255, 255, 255);\
-																			border: none;\
-																			selection-background-color: transparent;\
-																			selection-color: rgb(255, 255, 255);");
-
-	tempStr = "background-color: transparent;\
-																			color: rgb(255, 255, 255);\
-																			border: none;";
-
-
-	ui.PlayOrPauseBtn->setStyleSheet(tempStr);
-
-	ui.VolumeBtn->setStyleSheet(tempStr);
-
-	ui.FullScreenBtn->setStyleSheet(tempStr);*/
-
 	ui.PlayOrPauseBtn->setFont(fontIcon);
 	ui.PlayOrPauseBtn->setText(QChar(0xe570));
 	ui.VolumeBtn->setFont(fontIcon);
 	ui.VolumeBtn->setText(QChar(0xe858));
 	ui.FullScreenBtn->setFont(fontIcon);
 	ui.FullScreenBtn->setText(QChar(0xe659));
-
-	/*ui.PlayOrPauseBtn->setStyleSheet("QPushButton { color: black; selection-background-color: transparent;border: none;}"
-		"QPushButton:hover { color: red; }");*/
-
-	//ui.PlayOrPauseBtn->setStyleSheet(Helper::loadQssStr(":/qss/qss/ctr_bar.css"));
 }
 
 // 连接信号和槽
@@ -104,10 +101,3 @@ void CtrBar::do_PlayOrPauseBtnClicked()
 	}
 }
 
-// 处理来自show的设置音量滑块位置的信号
-void CtrBar::do_SetVolumeSliderPos()
-{
-	// 向show发信号设置音量滑块位置
-	emit sig_SetVolumeSliderPos(ui.VolumeBtn->pos().x());
-	qDebug() << ui.VolumeBtn->pos().x();
-}

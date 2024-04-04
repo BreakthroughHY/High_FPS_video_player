@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <QTimer>
 #include "ui_High_FPS_video_player.h"
 
 typedef struct WinZoomStatus {
@@ -28,6 +29,10 @@ protected:
     void mouseMoveEvent(QMouseEvent* event) override;
     // 鼠标抬起虚函数实现
     void mouseReleaseEvent(QMouseEvent* event) override;
+    // 大小改变虚函数
+    void resizeEvent(QResizeEvent* event) override;
+    // 鼠标离开窗口触发的事件
+    void leaveEvent(QEvent* event);
     // 事件过滤器虚函数
     bool eventFilter(QObject* obj, QEvent* event);
 
@@ -42,12 +47,22 @@ private:
     void borderExtension(QPoint& curPoint, int flag);
     // CtrlBarWid位置和大小设置函数，show中无法访问CtrlBarWid所有在这里设置
     void setCtrlBarWidPos();
-    // 大小改变虚函数
-    void resizeEvent(QResizeEvent* event) override;
+
+signals:
+    // 设置音量滑块显示与否的信号
+    void sig_SetVolumeSliderShowHide(bool flag);
+    // 向show发信号显示btnCloseVideoList
+    void sig_showbtnCloseVideoList();
     
 private slots:
     // 处理窗口移动的槽函数
     void do_MoveWindow(QPoint& tempPos);
+    // 隐藏ctr_bar
+    void do_TimeoutHideCtr_bar();
+    // 视频列表隐藏和显示
+    void do_videoListShowHide(bool flag);
+
+
 private:
     int borderWidth = 5; // 边框宽度   由于检测鼠标是否在边框上
     // 窗口缩放状态记录
@@ -56,6 +71,13 @@ private:
     QCursor cursor;
     // 窗口当前的位置和大小信息
     QRect curGeometry;
+    // 定时器对象指针
+    QTimer* ctr_barTimer;
+    // ctr_bar是否显示
+    bool ctr_barDisplay = false;
+    // 用户是否隐藏了视频列表
+    bool hiddenVideoList = false;
+
 private:
     Ui::High_FPS_video_playerClass ui;
 };

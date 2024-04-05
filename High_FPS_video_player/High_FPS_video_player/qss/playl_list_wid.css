@@ -1,8 +1,42 @@
 * {
+	outline:0px;
 	border: 0;
 	background-color: rgb(23, 24, 27);
 	color: rgb(255, 255, 255);
+	font: 16px;
+}
+
+QPushButton {
+	border: 0;
+	height: 50px;
+	width: 60px;
+	font-weight: bold;
+	font: 16px;
+}
+
+
+
+QPushButton#btnAdd {
+}
+
+QPushButton:hover {
+	color: rgb(78, 194, 145);
+}
+
+QListWidget {
+	border-top: 1px solid rgb(35, 37, 39);
+}
+
+QListWidget::item {
+	padding-left: 10px;
+	border: 0;
+	height: 40px;
 	font: 20px;
+}
+
+QListWidget::item:selected, QListWidget::item:hover {
+	background-color: rgb(35, 37, 39);
+	color: rgb(78, 194, 145);
 }
 
 QScrollBar:vertical { 
@@ -11,7 +45,7 @@ QScrollBar:vertical {
 }
 /*设置滑块样式*/
 QScrollBar::handle:vertical { 
-	background-color: rgb(46, 48, 52);
+	background-color: rgb(51, 53, 57);
 	border-radius: 4px;
 }
 /*隐藏滑块上下的按钮*/
@@ -23,5 +57,5 @@ QScrollBar::sub-page:vertical { background-color: rgb(23, 24, 27); }
 /*设置设置鼠标经过滑块滑块的颜色*/
 QScrollBar::handle:vertical:hover
 {
-	background: #555555;
+	background-color: rgb(60, 63, 68);
 }

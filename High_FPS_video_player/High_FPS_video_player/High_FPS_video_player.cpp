@@ -29,7 +29,8 @@ High_FPS_video_player::High_FPS_video_player(QWidget *parent)
     // 隐藏CtrlBarWid
     ui.CtrlBarWid->hide();
 
-    //setWindowState(Qt::WindowFullScreen);
+    //ui.TitleWid->hide();
+    //setWindowState(Qt::WindowNoState);
 }
 
 High_FPS_video_player::~High_FPS_video_player()
@@ -81,7 +82,7 @@ bool High_FPS_video_player::eventFilter(QObject* obj, QEvent* event)
         // 窗口缩放处理(函数内处理的是鼠标样式的变化和判断当前鼠标位置是否具备改变窗口大小条件)
 
         // 窗口最大化时禁止进行窗口大小拖拽
-        if (!ui.TitleWid->getMaximize())
+        if (!ui.TitleWid->getMaximize() && !sig_FullScreen)
         {
             winZoom(curPos);
 
@@ -131,30 +132,50 @@ bool High_FPS_video_player::eventFilter(QObject* obj, QEvent* event)
         // 进入title下方
         if (curPos.y() >= ui.TitleWid->height())
         {
+            // 显示鼠标光标
+            QApplication::restoreOverrideCursor();  // 取消隐藏，显示鼠标光标
             // 向show发信号显示btnCloseVideoList
-            emit sig_showbtnCloseVideoList();
-            // 进入show
-            if (curPos.x() < ui.ShowWid->width())
+            if (!sig_FullScreen)
             {
-                ctr_barDisplay = true;
-                ui.CtrlBarWid->show();
-                if (curPos.y() > height() - ui.CtrlBarWid->height())
+                emit sig_showbtnCloseVideoList();
+            }
+
+            // 进入show
+            if (!enterVolumeWid && !enterBtnCloseVideoList) // 如果鼠标进入音量滑块窗口就禁止通过鼠标位置更改ctr_bar的显示
+            {
+                if (curPos.x() < ui.ShowWid->width())
                 {
-                    ctr_barTimer->stop();
+                    ctr_barDisplay = true;
+                    ui.CtrlBarWid->show();
+                    if (curPos.y() > height() - ui.CtrlBarWid->height())
+                    {
+                        ctr_barTimer->stop();
+                    }
+                    else
+                    {
+                        ctr_barTimer->start();
+                    }
                 }
                 else
                 {
-                    ctr_barTimer->start();
+                    if (ctr_barDisplay)
+                    {
+                        ctr_barDisplay = false;
+                        ctr_barTimer->stop();
+                        ui.CtrlBarWid->hide();
+                        emit sig_hideVolumeSlider();
+                    }
                 }
             }
-            else
+        }
+        else
+        {
+            if (ctr_barDisplay)
             {
-                if (ctr_barDisplay)
-                {
-                    ctr_barDisplay = false;
-                    ctr_barTimer->stop();
-                    ui.CtrlBarWid->hide();
-                }
+                ctr_barDisplay = false;
+                ctr_barTimer->stop();
+                ui.CtrlBarWid->hide();
+                emit sig_hideVolumeSlider();
             }
         }
     }
@@ -207,8 +228,19 @@ void High_FPS_video_player::connectSignalSlots()
     connect(this, &High_FPS_video_player::sig_SetVolumeSliderShowHide, ui.ShowWid, &Show::do_TimeoutShowVolumeWid);
     // 窗口鼠标在title下方移动的信号发给show设置btnCloseVideoList可见
     connect(this, &High_FPS_video_player::sig_showbtnCloseVideoList, ui.ShowWid, &Show::do_TimeoutShowBtnVideoList);
-    // 
+    // 连接show的设置视频列表是否显示的信号和对应的在主窗口中的槽函数
     connect(ui.ShowWid, &Show::sig_videoListShowHide, this, &High_FPS_video_player::do_videoListShowHide);
+    // 连接show传出的是否进入音量滑块窗口和对应在主窗口中的槽函数
+    connect(ui.ShowWid, &Show::sig_enterVolumeWid, this, &High_FPS_video_player::do_enterVolumeWid);
+    // 主窗口发射信号立即隐藏音量滑块窗口
+    connect(this, &High_FPS_video_player::sig_hideVolumeSlider, ui.ShowWid, &Show::do_TimeoutHideVolumeWid);
+    // 主窗口向show发射信号立刻隐藏视频列表关闭按钮槽函数
+    connect(this, &High_FPS_video_player::sig_hideBtnCloseVideoList, ui.ShowWid, &Show::do_hideBtnCloseVideoList);
+    // show发射信号主窗口根据信号进行相应的设置
+    connect(ui.ShowWid, &Show::sig_enterBtnCloseVideoList, this, &High_FPS_video_player::do_btnCloseVideoList);
+    // 连接ctr_bar中的全屏信号与主窗口中的全屏槽函数
+    connect(ui.CtrlBarWid, &CtrBar::sig_fullScreen, this, &High_FPS_video_player::do_fullScreen);
+
 
     // 自己连自己
     // 连接ctr_bar对应的定时器和隐藏槽函数
@@ -364,7 +396,11 @@ void High_FPS_video_player::leaveEvent(QEvent* event) {
         {
             ctr_barTimer->stop();
             ui.CtrlBarWid->hide();
+            emit sig_hideVolumeSlider();
         }
+
+        // 立刻隐藏视频列表关闭按钮信号发射
+        emit sig_hideBtnCloseVideoList();
     }
 }
 
@@ -379,6 +415,7 @@ void High_FPS_video_player::do_TimeoutHideCtr_bar()
 {
     ctr_barDisplay = false;
     ui.CtrlBarWid->hide();
+    QApplication::setOverrideCursor(Qt::BlankCursor);  // 隐藏鼠标光标
 }
 
 // 视频列表隐藏和显示
@@ -394,5 +431,40 @@ void High_FPS_video_player::do_videoListShowHide(bool flag)
         hiddenVideoList = false;
         ui.PlaylistWid->show();
     }
+}
 
+// 根据show传出的音量滑块窗口是否显示进行设置
+void High_FPS_video_player::do_enterVolumeWid(bool flag)
+{
+    enterVolumeWid = flag;
+    if (ctr_barTimer->isActive())
+        ctr_barTimer->stop();
+}
+
+// 根据show传出的是否进入BtnCloseVideoList进行处理
+void High_FPS_video_player::do_btnCloseVideoList(bool flag)
+{
+    enterBtnCloseVideoList = flag;
+    if (ctr_barTimer->isActive())
+        ctr_barTimer->stop();
+    ui.CtrlBarWid->hide();
+    emit sig_hideVolumeSlider();
+}
+
+// 全屏
+void High_FPS_video_player::do_fullScreen(bool flag)
+{
+    sig_FullScreen = flag;
+    if (flag)
+    {
+        emit sig_hideBtnCloseVideoList();
+        setWindowState(Qt::WindowFullScreen);
+        ui.TitleWid->hide();
+        ui.PlaylistWid->hide();
+    }
+    else
+    {
+        setWindowState(Qt::WindowNoState);
+        ui.TitleWid->show();
+    }
 }

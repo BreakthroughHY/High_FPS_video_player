@@ -53,6 +53,10 @@ signals:
     void sig_SetVolumeSliderShowHide(bool flag);
     // 向show发信号显示btnCloseVideoList
     void sig_showbtnCloseVideoList();
+    // 立刻隐藏音量滑块窗口信号
+    void sig_hideVolumeSlider();
+    // 立刻隐藏视频列表关闭按钮
+    void sig_hideBtnCloseVideoList();
     
 private slots:
     // 处理窗口移动的槽函数
@@ -61,6 +65,12 @@ private slots:
     void do_TimeoutHideCtr_bar();
     // 视频列表隐藏和显示
     void do_videoListShowHide(bool flag);
+    // 根据show传出的音量滑块窗口是否显示进行设置
+    void do_enterVolumeWid(bool flag);
+    // 根据show传出的是否进入BtnCloseVideoList进行处理
+    void do_btnCloseVideoList(bool flag);
+    // 全屏
+    void do_fullScreen(bool flag);
 
 
 private:
@@ -77,6 +87,12 @@ private:
     bool ctr_barDisplay = false;
     // 用户是否隐藏了视频列表
     bool hiddenVideoList = false;
+    // 进入音量滑块窗口
+    bool enterVolumeWid = false;
+    // 进入BtnCloseVideoList
+    bool enterBtnCloseVideoList = false;
+    // 是全屏
+    bool sig_FullScreen = false;
 
 private:
     Ui::High_FPS_video_playerClass ui;

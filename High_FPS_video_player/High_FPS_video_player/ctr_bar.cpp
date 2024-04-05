@@ -84,6 +84,8 @@ void CtrBar::connectSignalSlots()
 {
 	// 连接播放和暂停按钮对应的槽
 	connect(ui.PlayOrPauseBtn, &QPushButton::clicked, this, &CtrBar::do_PlayOrPauseBtnClicked);
+	// 连接全屏按钮与相应的槽函数
+	connect(ui.FullScreenBtn, &QPushButton::clicked, this, &CtrBar::do_FullScreenBtnClicked);
 }
 
 // 播放和暂停按钮对应的槽
@@ -101,3 +103,19 @@ void CtrBar::do_PlayOrPauseBtnClicked()
 	}
 }
 
+// 处理全屏按钮
+void CtrBar::do_FullScreenBtnClicked()
+{
+	if (sig_FullScreen)
+	{
+		sig_FullScreen = false;
+		ui.FullScreenBtn->setText(QChar(0xe659));
+		emit sig_fullScreen(sig_FullScreen);
+	}
+	else
+	{
+		sig_FullScreen = true;
+		ui.FullScreenBtn->setText(QChar(0xe65a));
+		emit sig_fullScreen(sig_FullScreen);
+	}
+}

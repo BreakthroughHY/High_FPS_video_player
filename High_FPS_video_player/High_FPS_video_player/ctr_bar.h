@@ -36,16 +36,22 @@ signals:
 	void sig_SetVolumeSliderPos(int x);
 	// 设置音量滑块显示与否的信号
 	void sig_SetVolumeSliderShowHide(bool flag);
+	// 全屏信号
+	void sig_fullScreen(bool flag);
 
 public slots:
 	// 播放和暂停按钮对应的槽
 	void do_PlayOrPauseBtnClicked();
+	// 处理全屏按钮
+	void do_FullScreenBtnClicked();
 
 private:
 	// 字体图标
 	QFont fontIcon;
 	// 记录视频是否播放中
 	bool playing = false;
+	// 是全屏
+	bool sig_FullScreen = false;
 
 private:
 	Ui::CtrBarClass ui;

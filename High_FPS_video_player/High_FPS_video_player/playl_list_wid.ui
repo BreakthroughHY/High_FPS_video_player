@@ -48,6 +48,12 @@
        <property name="text">
         <string>本地</string>
        </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -57,6 +63,9 @@
        </property>
        <property name="text">
         <string>网络</string>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -86,72 +95,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QListWidget" name="videoListWid">
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>新建项目</string>
-      </property>
-     </item>
+    <widget class="QListWidget" name="LocalVideoListWid">
      <item>
       <property name="text">
        <string>新建项目</string>
@@ -165,7 +109,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QListWidget" name="listWidget"/>
+    <widget class="QListWidget" name="NetworkVideoListWid"/>
    </item>
   </layout>
  </widget>

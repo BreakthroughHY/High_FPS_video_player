@@ -24,6 +24,10 @@ Show::Show(QWidget *parent)
 	// 连接信号和槽
 	connectSignalSlots();
 
+	// 
+	ui.VolumeWid->installEventFilter(this);
+	ui.btnCloseVideoList->installEventFilter(this);
+
 	ui.VolumeWid->hide();
 	ui.btnCloseVideoList->hide();
 }
@@ -70,6 +74,53 @@ void Show::mouseMoveEvent(QMouseEvent* event)
 // 事件过滤器虚函数
 bool Show::eventFilter(QObject* obj, QEvent* event)
 {
+	// 处理音量滑块窗口事件
+	if (obj == ui.VolumeWid)
+	{
+		// 鼠标进入音量滑块窗口
+		if (event->type() == QEvent::Enter)
+		{
+			// 音量滑块窗口消失的计时器如果开启就关闭它
+			if (volumeWidTimer->isActive())
+			{
+				volumeWidTimer->stop();
+			}
+			// 向主窗口发信号传输
+			sig_enterVolumeWid(true);
+		}
+		// 鼠标离开音量滑块窗口
+		else if (event->type() == QEvent::Leave)
+		{
+			// 音量滑块窗口消失的计时器如果没有开启就开启它
+			if (!volumeWidTimer->isActive())
+			{
+				volumeWidTimer->start();
+			}
+			// 向主窗口发信号传输
+			sig_enterVolumeWid(false);
+		}
+	}
+	// 处理关闭视频列表按钮事件
+	else if (obj == ui.btnCloseVideoList)
+	{
+		// 鼠标进入关闭视频列表按钮
+		if (event->type() == QEvent::Enter)
+		{
+			// 向主窗口发送是否进入BtnCloseVideoList按钮
+			emit sig_enterBtnCloseVideoList(true);
+			enterBtnCloseVideoList = true;
+			btnCloseVideoListTimer->stop();
+		}
+		// 鼠标离开关闭视频列表按钮
+		else if (event->type() == QEvent::Leave)
+		{
+			// 向主窗口发送是否离开BtnCloseVideoList按钮
+			emit sig_enterBtnCloseVideoList(false);
+			enterBtnCloseVideoList = false;
+			btnCloseVideoListTimer->start();
+		}
+	}
+
 	return QWidget::eventFilter(obj, event);
 }
 
@@ -95,6 +146,8 @@ void Show::connectSignalSlots()
 	connect(this->btnCloseVideoListTimer, &QTimer::timeout, this, &Show::do_TimeoutHideBtnVideoList);
 	// 连接btnCloseVideoList按钮对应的槽函数
 	connect(ui.btnCloseVideoList, &QPushButton::clicked, this, &Show::do_closeBtnVideoListClicked);
+	// 通过滑块改变音量
+	connect(ui.VolumeSlider, &QSlider::valueChanged, this, &Show::do_valueChanged);
 }
 
 // 设置音量滑块位置的槽函数
@@ -126,8 +179,11 @@ void Show::do_TimeoutHideVolumeWid()
 // 隐藏btnCloseVideoList
 void Show::do_TimeoutShowBtnVideoList()
 {
-	ui.btnCloseVideoList->show();
-	btnCloseVideoListTimer->start();
+	if (!enterBtnCloseVideoList)
+	{
+		ui.btnCloseVideoList->show();
+		btnCloseVideoListTimer->start();
+	}
 }
 
 // 显示btnCloseVideoList
@@ -151,3 +207,17 @@ void Show::do_closeBtnVideoListClicked()
 	}
 }
 
+// 处理立刻隐藏视频列表关闭按钮
+void Show::do_hideBtnCloseVideoList()
+{
+	if (!btnCloseVideoListTimer->isActive())
+		btnCloseVideoListTimer->stop();
+
+	ui.btnCloseVideoList->hide();
+}
+
+// 通过滑块改变音量
+void Show::do_valueChanged(int value)
+{
+	ui.VolumeLabel->setText(QString::number(value) + "%");
+}

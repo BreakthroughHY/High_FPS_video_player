@@ -36,8 +36,12 @@ private:
 signals:
 	// 向主窗口发信号设置CtrlBarWid位置
 	void sig_setCtrlBarWidPos();
-	// 
+	// 向主窗口发信号设置视频列表是否显示
 	void sig_videoListShowHide(bool flag);
+	// 向主窗口发信号传输
+	void sig_enterVolumeWid(bool flag);
+	// 向主窗口发信号传输
+	void sig_enterBtnCloseVideoList(bool flag);
 
 public slots:
 	// 设置音量滑块位置的槽函数
@@ -52,6 +56,10 @@ public slots:
 	void do_TimeoutHideBtnVideoList();
 	// 关闭视频列表的槽
 	void do_closeBtnVideoListClicked();
+	// 处理立刻隐藏视频列表关闭按钮
+	void do_hideBtnCloseVideoList();
+	// 通过滑块改变音量
+	void do_valueChanged(int value);
 
 private:
 	// openGL窗口比例   临时的
@@ -63,6 +71,8 @@ private:
 	QTimer* btnCloseVideoListTimer;
 	// 视频列表是否被收起
 	bool videoListCollapse = false;
+	// 进入BtnCloseVideoList
+	bool enterBtnCloseVideoList = false;
 
 private:
 	Ui::ShowClass ui;

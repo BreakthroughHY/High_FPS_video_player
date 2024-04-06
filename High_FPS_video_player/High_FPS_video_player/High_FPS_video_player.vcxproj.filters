@@ -27,6 +27,12 @@
     <Filter Include="Header Files\Qt">
       <UniqueIdentifier>{2cd5fe97-a276-4708-9495-bbbbeffa7621}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FFmpeg">
+      <UniqueIdentifier>{63d17e07-3edc-41ce-bed6-aaca01bd22eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FFmpeg">
+      <UniqueIdentifier>{2188b4fe-f58c-4d3f-bec9-f3fece32d17a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="High_FPS_video_player.qrc">
@@ -58,14 +64,20 @@
     <ClCompile Include="ctr_bar.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
-    <ClCompile Include="helper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="playl_list_wid.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
     <ClCompile Include="re_QSlider.cpp">
       <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="helper.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="FFmpeg_safe_queue.cpp">
+      <Filter>Source Files\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="data_singleton.cpp">
+      <Filter>Source Files\FFmpeg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,11 +115,17 @@
     <ClInclude Include="REOpenGLWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="helper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="re_QSlider.h">
       <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="helper.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="FFmpeg_safe_queue.h">
+      <Filter>Header Files\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="data_singleton.h">
+      <Filter>Header Files\FFmpeg</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

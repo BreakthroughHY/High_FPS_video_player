@@ -55,14 +55,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>G:\Qt\High_FPS_video_player\High_FPS_video_player\ffmpeg\lib;$(LibraryPath)</LibraryPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
+    <IncludePath>G:\Qt\High_FPS_video_player\High_FPS_video_player\ffmpeg\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>avutil.lib;postproc.lib;swresample.lib;swscale.lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -91,6 +92,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ctr_bar.cpp" />
+    <ClCompile Include="data_singleton.cpp" />
+    <ClCompile Include="FFmpeg_safe_queue.cpp" />
     <ClCompile Include="helper.cpp" />
     <ClCompile Include="playl_list_wid.cpp" />
     <ClCompile Include="REOpenGLWidget.cpp" />
@@ -115,6 +118,8 @@
     <QtMoc Include="show.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="data_singleton.h" />
+    <ClInclude Include="FFmpeg_safe_queue.h" />
     <ClInclude Include="re_QSlider.h" />
     <QtMoc Include="ctr_bar.h" />
     <ClInclude Include="helper.h" />

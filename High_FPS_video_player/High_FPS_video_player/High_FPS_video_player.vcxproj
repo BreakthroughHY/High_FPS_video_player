@@ -63,7 +63,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>avutil.lib;postproc.lib;swresample.lib;swscale.lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>avformat.lib;avutil.lib;postproc.lib;swresample.lib;swscale.lib;avcodec.lib;avdevice.lib;avfilter.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -93,13 +93,16 @@
   <ItemGroup>
     <ClCompile Include="ctr_bar.cpp" />
     <ClCompile Include="data_singleton.cpp" />
+    <ClCompile Include="demux_thread.cpp" />
     <ClCompile Include="FFmpeg_safe_queue.cpp" />
     <ClCompile Include="helper.cpp" />
     <ClCompile Include="playl_list_wid.cpp" />
     <ClCompile Include="REOpenGLWidget.cpp" />
     <ClCompile Include="re_QSlider.cpp" />
     <ClCompile Include="show.cpp" />
+    <ClCompile Include="thread_base.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="video_class.cpp" />
     <QtRcc Include="High_FPS_video_player.qrc" />
     <QtRcc Include="res.qrc" />
     <QtUic Include="ctr_bar.ui" />
@@ -119,8 +122,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data_singleton.h" />
+    <ClInclude Include="demux_thread.h" />
     <ClInclude Include="FFmpeg_safe_queue.h" />
     <ClInclude Include="re_QSlider.h" />
+    <ClInclude Include="thread_base.h" />
+    <ClInclude Include="video_class.h" />
     <QtMoc Include="ctr_bar.h" />
     <ClInclude Include="helper.h" />
     <QtMoc Include="playl_list_wid.h" />

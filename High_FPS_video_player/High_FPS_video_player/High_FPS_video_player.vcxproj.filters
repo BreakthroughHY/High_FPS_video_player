@@ -33,6 +33,12 @@
     <Filter Include="Source Files\FFmpeg">
       <UniqueIdentifier>{2188b4fe-f58c-4d3f-bec9-f3fece32d17a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\FFmpeg\thread">
+      <UniqueIdentifier>{418d2b8c-bfa0-4541-9925-884f1f5fa208}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FFmpeg\thread">
+      <UniqueIdentifier>{a8837e6b-a85b-4a87-9455-a6171b088cdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="High_FPS_video_player.qrc">
@@ -78,6 +84,15 @@
     </ClCompile>
     <ClCompile Include="data_singleton.cpp">
       <Filter>Source Files\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="video_class.cpp">
+      <Filter>Source Files\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_base.cpp">
+      <Filter>Source Files\FFmpeg\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="demux_thread.cpp">
+      <Filter>Source Files\FFmpeg\thread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +141,15 @@
     </ClInclude>
     <ClInclude Include="data_singleton.h">
       <Filter>Header Files\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="video_class.h">
+      <Filter>Header Files\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="thread_base.h">
+      <Filter>Header Files\FFmpeg\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="demux_thread.h">
+      <Filter>Header Files\FFmpeg\thread</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

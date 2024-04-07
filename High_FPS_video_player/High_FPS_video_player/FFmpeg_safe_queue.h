@@ -2,10 +2,18 @@
 
 #include <queue>
 #include <mutex>
+//#include <libavcodec\packet.h>
+//#include <libavcodec\avcodec.h>
 #include <condition_variable>
+#include <iostream>
 
 using namespace std;
 
+extern "C"
+{
+#include <libavcodec\packet.h>
+#include <libavcodec\avcodec.h>
+}
 
 template <typename T>
 class FFmpegSafeQueue
@@ -23,7 +31,7 @@ public:
 	// 等待到可以出队
 	void waitAndPop(T& item);
 	// 设置容量大小
-	void setCapacity(int capacity);
+	bool setCapacity(int capacity);
 
 private:
 	// 禁止外部访问只能通过public中的函数间接调用，所以函数中不用使用lock

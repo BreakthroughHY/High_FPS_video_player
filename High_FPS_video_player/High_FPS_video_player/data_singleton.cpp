@@ -33,12 +33,12 @@ bool DataSingleton::setFFmpegQueue(int vPNum, int aPNum, int vFNum, int aFNum)
             audioPacketQueue->setCapacity(aPNum);
 
         if (!videoFrameQueue) // 视频帧队列
-            videoFrameQueue = new FFmpegSafeQueue<AVCodec*>(vFNum);
+            videoFrameQueue = new FFmpegSafeQueue<AVFrame*>(vFNum);
         else
             videoFrameQueue->setCapacity(vFNum);
 
         if (!audioFrameQueue) // 音频帧队列
-            audioFrameQueue = new FFmpegSafeQueue<AVCodec*>(aFNum);
+            audioFrameQueue = new FFmpegSafeQueue<AVFrame*>(aFNum);
         else
             audioFrameQueue->setCapacity(aFNum);
     }
@@ -51,8 +51,8 @@ bool DataSingleton::setFFmpegQueue(int vPNum, int aPNum, int vFNum, int aFNum)
 // FFmpeg队列的get函数返回值是引用
 FFmpegSafeQueue<AVPacket*>* DataSingleton::getVideoPacketQueue() { return videoPacketQueue; }
 FFmpegSafeQueue<AVPacket*>* DataSingleton::getAudioPacketQueue() { return audioPacketQueue; }
-FFmpegSafeQueue<AVCodec*>* DataSingleton::getVideoFrameQueue() { return videoFrameQueue; }
-FFmpegSafeQueue<AVCodec*>* DataSingleton::getAudioFrameQueue() { return audioFrameQueue; }
+FFmpegSafeQueue<AVFrame*>* DataSingleton::getVideoFrameQueue() { return videoFrameQueue; }
+FFmpegSafeQueue<AVFrame*>* DataSingleton::getAudioFrameQueue() { return audioFrameQueue; }
 
 
 // 音视频格式的上下文结构体指针
@@ -85,4 +85,24 @@ void DataSingleton::setAudioIndex(unsigned audioIndex)
 unsigned DataSingleton::getAudioIndex()
 {
     return this->audioIndex;
+}
+
+// 视频解码器
+void DataSingleton::setVCodecCtx(AVCodecContext* vCodecCtx)
+{
+    this->vCodecCtx = vCodecCtx;
+}
+AVCodecContext* DataSingleton::getVCodecCtx()
+{
+    return this->vCodecCtx;
+}
+
+// 音频解码器
+void DataSingleton::setACodecCtx(AVCodecContext* aCodecCtx)
+{
+    this->aCodecCtx = aCodecCtx;
+}
+AVCodecContext* DataSingleton::getACodecCtx()
+{
+    return this->aCodecCtx;
 }

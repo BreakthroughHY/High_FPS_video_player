@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mutex>
-#include <atomic>
 #include "FFmpeg_safe_queue.h"
 
 extern "C"
@@ -21,8 +19,8 @@ public:
 	bool setFFmpegQueue(int vPNum, int aPNum, int vFNum, int aFNum);
 	FFmpegSafeQueue<AVPacket*>* getVideoPacketQueue();
 	FFmpegSafeQueue<AVPacket*>* getAudioPacketQueue();
-	FFmpegSafeQueue<AVCodec*>* getVideoFrameQueue();
-	FFmpegSafeQueue<AVCodec*>* getAudioFrameQueue();
+	FFmpegSafeQueue<AVFrame*>* getVideoFrameQueue();
+	FFmpegSafeQueue<AVFrame*>* getAudioFrameQueue();
 
 	// 音视频格式的上下文结构体指针
 	void setFormatCtx(AVFormatContext* formatCtx);
@@ -33,19 +31,27 @@ public:
 	// 音频索引
 	void setAudioIndex(unsigned audioIndex);
 	unsigned getAudioIndex();
+	// 视频解码器
+	void setVCodecCtx(AVCodecContext* vCodecCtx);
+	AVCodecContext* getVCodecCtx();
+	// 音频解码器
+	void setACodecCtx(AVCodecContext* aCodecCtx);
+	AVCodecContext* getACodecCtx();
 
 private:
 	// 包队列
 	FFmpegSafeQueue<AVPacket*>* videoPacketQueue = nullptr;
 	FFmpegSafeQueue<AVPacket*>* audioPacketQueue = nullptr;
 	// 帧队列
-	FFmpegSafeQueue<AVCodec*>* videoFrameQueue = nullptr;
-	FFmpegSafeQueue<AVCodec*>* audioFrameQueue = nullptr;
+	FFmpegSafeQueue<AVFrame*>* videoFrameQueue = nullptr;
+	FFmpegSafeQueue<AVFrame*>* audioFrameQueue = nullptr;
 
 	// 音视频格式的上下文结构体指针
 	AVFormatContext* formatCtx = nullptr;
 	// 视频和音频的索引
 	std::atomic<unsigned> videoIndex, audioIndex;
+	// 解码器
+	AVCodecContext* vCodecCtx = nullptr, * aCodecCtx = nullptr;
 
 
 private:

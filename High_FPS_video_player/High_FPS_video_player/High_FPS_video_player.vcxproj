@@ -93,6 +93,7 @@
   <ItemGroup>
     <ClCompile Include="ctr_bar.cpp" />
     <ClCompile Include="data_singleton.cpp" />
+    <ClCompile Include="decode_thread.cpp" />
     <ClCompile Include="demux_thread.cpp" />
     <ClCompile Include="FFmpeg_safe_queue.cpp" />
     <ClCompile Include="helper.cpp" />
@@ -122,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data_singleton.h" />
+    <ClInclude Include="decode_thread.h" />
     <ClInclude Include="demux_thread.h" />
     <ClInclude Include="FFmpeg_safe_queue.h" />
     <ClInclude Include="re_QSlider.h" />

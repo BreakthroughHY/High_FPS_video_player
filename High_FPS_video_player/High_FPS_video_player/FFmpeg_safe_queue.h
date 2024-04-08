@@ -2,8 +2,6 @@
 
 #include <queue>
 #include <mutex>
-//#include <libavcodec\packet.h>
-//#include <libavcodec\avcodec.h>
 #include <condition_variable>
 #include <iostream>
 

@@ -18,11 +18,13 @@ void FFmpegSafeQueue<T>::push(const T& item)
 
 	// 队列为满就阻塞生产线程
 	m_cond_push.wait(lock, [this]() { return !full(); });
-	std::cout << m_queue.size() << endl;
+	
 	// 插入新的数据
 	m_queue.push(item);
+	//std::cout << m_queue.size() << std::endl;
 	// 尝试去激活一个消费线程，如果有的话
 	m_cond_pop.notify_one();
+
 }
 
 
@@ -105,4 +107,4 @@ void FFmpegSafeQueue<T>::clear()
 
 // 显式实例化，以便确保编译器生成所需的模板实例
 template class FFmpegSafeQueue<AVPacket*>;
-template class FFmpegSafeQueue<AVCodec*>;
+template class FFmpegSafeQueue<AVFrame*>;

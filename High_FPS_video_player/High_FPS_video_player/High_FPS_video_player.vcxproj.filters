@@ -94,6 +94,9 @@
     <ClCompile Include="demux_thread.cpp">
       <Filter>Source Files\FFmpeg\thread</Filter>
     </ClCompile>
+    <ClCompile Include="decode_thread.cpp">
+      <Filter>Source Files\FFmpeg\thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="title.ui">
@@ -149,6 +152,9 @@
       <Filter>Header Files\FFmpeg\thread</Filter>
     </ClInclude>
     <ClInclude Include="demux_thread.h">
+      <Filter>Header Files\FFmpeg\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="decode_thread.h">
       <Filter>Header Files\FFmpeg\thread</Filter>
     </ClInclude>
   </ItemGroup>

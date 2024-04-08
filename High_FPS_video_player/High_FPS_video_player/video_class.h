@@ -15,6 +15,7 @@ class videoClass
 public:
 	videoClass();
 	//videoClass(const std::string& videoName);
+	~videoClass();
 
 	// 加载本地视频
 	bool loadVideo(std::string videoPath);
@@ -27,4 +28,6 @@ private:
 
 	// 视频和音频的索引
 	unsigned videoIndex, audioIndex;
+	// 解码器
+	AVCodecContext* vCodecCtx = nullptr, * aCodecCtx = nullptr;
 };

@@ -15,15 +15,13 @@ class DemuxThread : public ThreadBase
 public:
 	DemuxThread();
 	~DemuxThread();
-
+	// 设置属性
 	void setParameters();
 
 protected:
 	void run() override; // 告诉编译器重写父类虚函数
 
 private:
-	// 设置解复用的参数
-	//void setParameters();
 
 private:
 	// 全局唯一的数据对象 支持多线程访问

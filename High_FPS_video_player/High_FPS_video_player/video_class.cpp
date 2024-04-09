@@ -22,7 +22,12 @@ videoClass::~videoClass()
 bool videoClass::loadVideo(std::string videoPath)
 {
 	if (formatCtx)
+	{
 		avformat_close_input(&formatCtx);
+		formatCtx = nullptr;
+	}
+
+	formatCtx = avformat_alloc_context();
 
 	QString utf8Path = QString::fromLocal8Bit(videoPath.c_str()).toUtf8();
 

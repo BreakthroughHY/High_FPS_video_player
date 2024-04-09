@@ -6,7 +6,7 @@ REOpenGLWidget::REOpenGLWidget(QWidget* parent)
 
 }
 
-REOpenGLWidget::~REOpenGLWidget()
+REOpenGLWidget::~REOpenGLWidget() 
 {
 
 }

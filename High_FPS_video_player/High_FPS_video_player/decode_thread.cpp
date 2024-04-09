@@ -16,7 +16,7 @@ DecodeThread::DecodeThread(Types types)
 		frameQueue = dataSingleton.getAudioFrameQueue();
 	}
 
-	AVFrame* frame = av_frame_alloc();
+	frame = av_frame_alloc();
 }
 
 DecodeThread::~DecodeThread()
@@ -48,17 +48,15 @@ void DecodeThread::run()
 		while (true)
 		{
 			int ret = avcodec_receive_frame(codecCtx, frame);
-			//if (ret == 0)
-			//{
-			//	frameQueue->push(frame);
-			//	//AVFrame* frame = av_frame_alloc();
-			//	frame = nullptr;
-			//	
-			//}
-			//else
-			//{
-			//	break;
-			//}
+			if (ret == 0)
+			{
+				frameQueue->push(frame);
+				frame = av_frame_alloc();
+			}
+			else
+			{
+				break;
+			}
 		}
 	}
 }

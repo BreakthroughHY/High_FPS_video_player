@@ -55,15 +55,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <LibraryPath>G:\Qt\High_FPS_video_player\High_FPS_video_player\ffmpeg\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>G:\Qt\High_FPS_video_player\High_FPS_video_player\SDL2-2.28.5\lib\x64;G:\Qt\High_FPS_video_player\High_FPS_video_player\ffmpeg\lib;$(LibraryPath)</LibraryPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>G:\Qt\High_FPS_video_player\High_FPS_video_player\ffmpeg\include;$(IncludePath)</IncludePath>
+    <IncludePath>G:\Qt\High_FPS_video_player\High_FPS_video_player\SDL2-2.28.5\include;G:\Qt\High_FPS_video_player\High_FPS_video_player\ffmpeg\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>avformat.lib;avutil.lib;postproc.lib;swresample.lib;swscale.lib;avcodec.lib;avdevice.lib;avfilter.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>avformat.lib;avutil.lib;postproc.lib;swresample.lib;swscale.lib;avcodec.lib;avdevice.lib;avfilter.lib;SDL2main.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -91,6 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="audio_out_thread.cpp" />
     <ClCompile Include="ctr_bar.cpp" />
     <ClCompile Include="data_singleton.cpp" />
     <ClCompile Include="decode_thread.cpp" />
@@ -122,6 +123,7 @@
     <QtMoc Include="show.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="audio_out_thread.h" />
     <ClInclude Include="data_singleton.h" />
     <ClInclude Include="decode_thread.h" />
     <ClInclude Include="demux_thread.h" />

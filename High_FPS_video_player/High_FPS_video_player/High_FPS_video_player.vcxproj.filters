@@ -39,6 +39,12 @@
     <Filter Include="Header Files\FFmpeg\thread">
       <UniqueIdentifier>{a8837e6b-a85b-4a87-9455-a6171b088cdd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\openGL">
+      <UniqueIdentifier>{1692f451-61c8-438d-9828-80b43c31131c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\openGL">
+      <UniqueIdentifier>{11aac984-6962-4a84-b343-b2dac576b5e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="High_FPS_video_player.qrc">
@@ -95,6 +101,9 @@
       <Filter>Source Files\FFmpeg\thread</Filter>
     </ClCompile>
     <ClCompile Include="decode_thread.cpp">
+      <Filter>Source Files\FFmpeg\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="audio_out_thread.cpp">
       <Filter>Source Files\FFmpeg\thread</Filter>
     </ClCompile>
   </ItemGroup>
@@ -155,6 +164,9 @@
       <Filter>Header Files\FFmpeg\thread</Filter>
     </ClInclude>
     <ClInclude Include="decode_thread.h">
+      <Filter>Header Files\FFmpeg\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="audio_out_thread.h">
       <Filter>Header Files\FFmpeg\thread</Filter>
     </ClInclude>
   </ItemGroup>

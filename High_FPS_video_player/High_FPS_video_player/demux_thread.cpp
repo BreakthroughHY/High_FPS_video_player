@@ -18,20 +18,25 @@ void DemuxThread::run()
 	while (isRunning())
 	{
 		if (av_read_frame(formatCtx, packet) < 0)
-			return;
+		{
+			av_packet_free(&packet); // 被用过的包不能用，会内存泄露
+			packet = av_packet_alloc();
+			continue;
+		}
 
 		if (packet->stream_index == videoIndex)
 		{
 			videoPacketQueue->push(packet);
 			packet = av_packet_alloc();
-
-			AVFrame* frame = av_frame_alloc();
-			avcodec_send_packet(dataSingleton.getVCodecCtx(), packet);
-			std::cout << avcodec_receive_frame(dataSingleton.getVCodecCtx(), frame) << std::endl;
 		}
 		else if (packet->stream_index == audioIndex)
 		{
 			audioPacketQueue->push(packet);
+			packet = av_packet_alloc();
+		}
+		else
+		{
+			av_packet_free(&packet); // 被用过的包不能用，会内存泄露
 			packet = av_packet_alloc();
 		}
 	}

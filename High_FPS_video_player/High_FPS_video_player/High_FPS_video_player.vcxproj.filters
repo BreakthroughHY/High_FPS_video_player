@@ -45,6 +45,9 @@
     <Filter Include="Source Files\openGL">
       <UniqueIdentifier>{11aac984-6962-4a84-b343-b2dac576b5e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\GLSL">
+      <UniqueIdentifier>{36ad97d3-bc53-41f0-8ef4-723cf2a1e0a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="High_FPS_video_player.qrc">
@@ -54,7 +57,7 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtRcc Include="res.qrc">
-      <Filter>Translation Files</Filter>
+      <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +109,9 @@
     <ClCompile Include="audio_out_thread.cpp">
       <Filter>Source Files\FFmpeg\thread</Filter>
     </ClCompile>
+    <ClCompile Include="shader_arr.cpp">
+      <Filter>Source Files\openGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="title.ui">
@@ -137,11 +143,11 @@
     <QtMoc Include="playl_list_wid.h">
       <Filter>Header Files\Qt</Filter>
     </QtMoc>
+    <QtMoc Include="REOpenGLWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="REOpenGLWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="re_QSlider.h">
       <Filter>Header Files\Qt</Filter>
     </ClInclude>
@@ -169,5 +175,16 @@
     <ClInclude Include="audio_out_thread.h">
       <Filter>Header Files\FFmpeg\thread</Filter>
     </ClInclude>
+    <ClInclude Include="shader_arr.h">
+      <Filter>Header Files\openGL</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ShaderFile\video_shader.fs">
+      <Filter>Resource Files\GLSL</Filter>
+    </None>
+    <None Include="ShaderFile\video_shader.vs">
+      <Filter>Resource Files\GLSL</Filter>
+    </None>
   </ItemGroup>
 </Project>

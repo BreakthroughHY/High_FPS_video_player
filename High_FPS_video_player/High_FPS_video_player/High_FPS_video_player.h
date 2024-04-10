@@ -14,6 +14,11 @@ typedef struct WinZoomStatus {
     
 }WinZoomStatus;
 
+class VideoClass;
+class DemuxThread;
+class DecodeThread;
+class AudioOutThread;
+
 class High_FPS_video_player : public QMainWindow
 {
     Q_OBJECT
@@ -41,6 +46,10 @@ private:
     void setStyle();
     // 连接信号和槽
     void connectSignalSlots();
+    // 初始化FFmpeg相关的线程和设置
+    void initFFmpeg();
+    // 开启FFmpeg线程
+    void startFFmpeg();
     // 窗口缩放处理(函数内处理的是鼠标样式的变化和判断当前鼠标位置是否具备改变窗口大小条件)
     void winZoom(QPoint& curPos);
     // 处理四个边的扩展
@@ -74,6 +83,18 @@ private slots:
 
 
 private:
+    // 全局唯一的数据对象 支持多线程访问
+    DataSingleton& dataSingleton;
+
+    // FFmpeg
+    // 解复用线程对象指针
+    VideoClass* videoClass;
+    DemuxThread* demuxThread;
+    DecodeThread* vDecodeThread;
+    DecodeThread* aDecodeThread;
+    AudioOutThread* audioOutThread;
+
+    // Qt
     int borderWidth = 5; // 边框宽度   由于检测鼠标是否在边框上
     // 窗口缩放状态记录
     WinZoomStatus winZoomStatus;

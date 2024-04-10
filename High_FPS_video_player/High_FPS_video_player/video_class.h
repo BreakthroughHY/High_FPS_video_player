@@ -10,12 +10,12 @@
 //}
 
 
-class videoClass
+class VideoClass
 {
 public:
-	videoClass();
+	VideoClass();
 	//videoClass(const std::string& videoName);
-	~videoClass();
+	~VideoClass();
 
 	// 加载本地视频
 	bool loadVideo(std::string videoPath);

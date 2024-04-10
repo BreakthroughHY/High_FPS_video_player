@@ -4,9 +4,20 @@
 //using namespace std;
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
+#include <QTimer>
+#include "data_singleton.h"
+
+extern "C"
+{
+#include <libswscale\swscale.h>
+#include "libavutil\imgutils.h"
+}
+
+class ShaderArr;
 
 class REOpenGLWidget : public QOpenGLWidget, QOpenGLFunctions_3_3_Core
 {
+    Q_OBJECT
 public:
 
     explicit REOpenGLWidget(QWidget* parent = nullptr);
@@ -20,29 +31,48 @@ protected:
     void paintGL() override;
 
 private:
+    // 连接信号和槽
+    void connectSignalSlots();
+
+private slots:
+    // 处理窗口移动的槽函数
+    void flush();
+
+private:
+    // 全局唯一的数据对象 支持多线程访问
+    DataSingleton& dataSingleton;
+    // 帧队列
+    FFmpegSafeQueue<AVFrame*>* frameQueue = nullptr;
+    // 解码器
+    AVCodecContext* codecCtx = nullptr;
+    // 帧
+    AVFrame* frame = nullptr;
+    // 播放视频帧的计时器
+    QTimer* frameTimer;
+
+
+    // openGL
+    // 着色器数组对象指针
+    ShaderArr* shaderArr;
+    // 视频着色器key
+    unsigned int videoShaderKey = -1;
+
     unsigned int VBO, VAO;
 
-    unsigned int shaderProgram;
-
-    float vertices[12] = {
-    0.5f, 0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f,
-    -0.5f, 0.5f, 0.0f
+    float vertices[18] = {
+            1.0, 1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f,
+            -1.0f, 1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f,
+            -1.0f, 1.0f, 0.0f
     };
 
-    const char* vertexShaderSource = "#version 330 core\n"
-        "layout(location = 0) in vec3 aPos;\n"
-        "void main()\n"
-        "{\n"
-        "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-        "}\0";
+    struct SwsContext* swsContext = NULL;
+    int dst_linesize[4];
+    uint8_t* dst_data[4];
+    uint8_t* outBuffer = NULL;
 
-    const char* fragmentShaderSource = "#version 330 core\n"
-        "out vec4 FragColor;\n"
-        "void main()\n"
-        "{\n"
-        "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-        "}\n\0";
+    unsigned int texture0;
 };
 

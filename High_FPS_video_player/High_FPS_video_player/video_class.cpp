@@ -1,6 +1,6 @@
 #include "video_class.h"
 
-videoClass::videoClass()
+VideoClass::VideoClass()
 	: dataSingleton(DataSingleton::getInstance())
 {
 	vCodecCtx = avcodec_alloc_context3(NULL);
@@ -12,14 +12,14 @@ videoClass::videoClass()
 //
 //}
 
-videoClass::~videoClass()
+VideoClass::~VideoClass()
 {
 	avcodec_free_context(&vCodecCtx);
 	avcodec_free_context(&aCodecCtx);
 }
 
 // 加载本地视频
-bool videoClass::loadVideo(std::string videoPath)
+bool VideoClass::loadVideo(std::string videoPath)
 {
 	if (formatCtx)
 	{

@@ -101,6 +101,7 @@
     <ClCompile Include="playl_list_wid.cpp" />
     <ClCompile Include="REOpenGLWidget.cpp" />
     <ClCompile Include="re_QSlider.cpp" />
+    <ClCompile Include="shader_arr.cpp" />
     <ClCompile Include="show.cpp" />
     <ClCompile Include="thread_base.cpp" />
     <ClCompile Include="title.cpp" />
@@ -129,12 +130,17 @@
     <ClInclude Include="demux_thread.h" />
     <ClInclude Include="FFmpeg_safe_queue.h" />
     <ClInclude Include="re_QSlider.h" />
+    <ClInclude Include="shader_arr.h" />
     <ClInclude Include="thread_base.h" />
     <ClInclude Include="video_class.h" />
     <QtMoc Include="ctr_bar.h" />
     <ClInclude Include="helper.h" />
     <QtMoc Include="playl_list_wid.h" />
-    <ClInclude Include="REOpenGLWidget.h" />
+    <QtMoc Include="REOpenGLWidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ShaderFile\video_shader.fs" />
+    <None Include="ShaderFile\video_shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

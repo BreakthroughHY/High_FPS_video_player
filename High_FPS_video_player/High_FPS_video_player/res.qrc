@@ -11,4 +11,8 @@
         <file>qss/show.css</file>
         <file>qss/playl_list_wid.css</file>
     </qresource>
+    <qresource prefix="/shader">
+        <file>ShaderFile/video_shader.fs</file>
+        <file>ShaderFile/video_shader.vs</file>
+    </qresource>
 </RCC>

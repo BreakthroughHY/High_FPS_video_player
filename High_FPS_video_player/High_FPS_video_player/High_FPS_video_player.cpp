@@ -1,8 +1,12 @@
 #include "High_FPS_video_player.h"
 #include "qpushbutton.h"
+#include "video_class.h"
+#include "demux_thread.h"
+#include "decode_thread.h"
+#include "audio_out_thread.h"
 
 High_FPS_video_player::High_FPS_video_player(QWidget *parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent), dataSingleton(DataSingleton::getInstance())
 {
     ui.setupUi(this);
     // 关闭窗口控件
@@ -31,6 +35,9 @@ High_FPS_video_player::High_FPS_video_player(QWidget *parent)
 
     //ui.TitleWid->hide();
     //setWindowState(Qt::WindowNoState);
+
+    initFFmpeg();
+    startFFmpeg();
 }
 
 High_FPS_video_player::~High_FPS_video_player()
@@ -250,6 +257,32 @@ void High_FPS_video_player::connectSignalSlots()
     // ctr_bar中的播放空间大小改变发射信号连接show中的设置声音滑块位置的槽函数
     connect(ui.CtrlBarWid, &CtrBar::sig_SetVolumeSliderPos, ui.ShowWid, &Show::do_SetVolumeSliderPos);
 
+}
+
+// 初始化FFmpeg相关的线程和设置
+void High_FPS_video_player::initFFmpeg()
+{
+    //dataSingleton.setFFmpegQueue(10, 10, 10, 10);
+    videoClass = new VideoClass();
+    demuxThread = new DemuxThread();
+    vDecodeThread = new DecodeThread(DecodeThread::Types::VIDEO);
+    aDecodeThread = new DecodeThread(DecodeThread::Types::AUDIO);
+    audioOutThread = new AudioOutThread();
+}
+
+// 开启FFmpeg线程
+void High_FPS_video_player::startFFmpeg()
+{
+    videoClass->loadVideo("G:\\Python编程\\python项目\\PythonQt\\images\\xtl.mp4");
+    demuxThread->setParameters();
+    vDecodeThread->setParameters();
+    aDecodeThread->setParameters();
+    audioOutThread->setParameters();
+
+    demuxThread->start();
+    vDecodeThread->start();
+    aDecodeThread->start();
+    audioOutThread->start();
 }
 
 // 窗口缩放处理(函数内处理的是鼠标样式的变化和判断当前鼠标位置是否具备改变窗口大小条件)

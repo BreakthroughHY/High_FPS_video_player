@@ -6,23 +6,28 @@ REOpenGLWidget::REOpenGLWidget(QWidget* parent)
 {
 	frameQueue = dataSingleton.getVideoFrameQueue();
 
-	codecCtx = dataSingleton.getACodecCtx();
-
 	// 定时器对象指针  (要在连接槽函数之前创建计时器对象)
 	frameTimer = new QTimer(this);
+	countTimer = new QTimer(this);
 	// 定时精度
 	frameTimer->setTimerType(Qt::PreciseTimer);
+	countTimer->setTimerType(Qt::PreciseTimer);
 	// 定时间隔
-	frameTimer->setInterval(1);
+	frameTimer->setInterval(8);
+	countTimer->setInterval(1000);
 	// 设置循环计时
 	frameTimer->setSingleShot(false);
+	countTimer->setSingleShot(false);
 
 	frameTimer->start();
+	countTimer->start();
 	// 连接信号和槽
 	connectSignalSlots();
 
 	// 着色程序数组对象
 	shaderArr = new ShaderArr();
+
+	frameN = av_frame_alloc();
 }
 
 REOpenGLWidget::~REOpenGLWidget() 
@@ -48,33 +53,29 @@ void REOpenGLWidget::initializeGL()
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	// 设置数据解读方式
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	// 开启VAO管理的第一个属性
 	glEnableVertexAttribArray(0);
+	// 设置数据解读方式
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	// 开启VAO管理的第一个属性
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
-	//// 创建顶点着色器
-	//unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	//glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	//glCompileShader(vertexShader);
-
-	//// 创建片段着色器对象
-	//unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	//glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	//glCompileShader(fragmentShader);
-
-	//// 链接着色器对象
-	//shaderProgram = glCreateProgram();
-	//glAttachShader(shaderProgram, vertexShader);
-	//glAttachShader(shaderProgram, fragmentShader);
-	//glLinkProgram(shaderProgram);
-
-	//glDeleteShader(vertexShader);
-	//glDeleteShader(fragmentShader);
-
 	glGenTextures(1, &texture0);
+
+
+
+	videoFrameTexture = new QOpenGLTexture(QOpenGLTexture::Target2D);
+	videoFrameTexture->create();
+	videoFrameTexture->bind();
+	// 设置纹理参数
+	videoFrameTexture->setMinificationFilter(QOpenGLTexture::Linear);
+	videoFrameTexture->setMagnificationFilter(QOpenGLTexture::Linear);
+	videoFrameTexture->setWrapMode(QOpenGLTexture::ClampToEdge);
+	videoFrameTexture->release();
 }
 
 void REOpenGLWidget::resizeGL(int w, int h)
@@ -86,6 +87,8 @@ void REOpenGLWidget::resizeGL(int w, int h)
 void REOpenGLWidget::connectSignalSlots()
 {
 	connect(this->frameTimer, &QTimer::timeout, this, &REOpenGLWidget::flush);
+	connect(this->countTimer, &QTimer::timeout, [this] { qDebug() << this->count;
+	this->count = 0; });
 }
 
 void REOpenGLWidget::paintGL()
@@ -93,33 +96,45 @@ void REOpenGLWidget::paintGL()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	// 绑定VAO
+	glBindVertexArray(VAO);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture0);
-	// 设置纹理对应片段着色器中的变量
-	int vertexMultiplierLocation = glGetUniformLocation(shaderArr->getShaderId(videoShaderKey), "videoFrame");
-	glUniform1i(vertexMultiplierLocation, 0);
-
+	videoFrameTexture->bind();
 
 	shaderArr->useShaderId(videoShaderKey);
-	glBindVertexArray(VAO);
+
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	videoFrameTexture->release();
+	// 解绑VAO
+	glBindVertexArray(0);
 }
 
 void REOpenGLWidget::flush()
 {
 	frameQueue->waitAndPop(frame);
-	swsContext = sws_getCachedContext(swsContext, codecCtx->width, codecCtx->height, codecCtx->pix_fmt, codecCtx->width, codecCtx->height, AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
-	if (!outBuffer)
-		outBuffer = (uint8_t*)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB24, codecCtx->width, codecCtx->height, 64));
-	av_image_fill_arrays(dst_data, dst_linesize, outBuffer, AV_PIX_FMT_RGB24, codecCtx->width, codecCtx->height, 1);
-
-	sws_scale(swsContext, frame->data, frame->linesize, 0, frame->height, dst_data, dst_linesize);
-
-	glBindTexture(GL_TEXTURE_2D, texture0);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, codecCtx->width, codecCtx->height, 0, GL_RGB, GL_UNSIGNED_BYTE, dst_data);
-
 	//frameQueue->tryPop(frame);
+
+	if (!codecCtx)
+	{
+		codecCtx = dataSingleton.getVCodecCtx();
+		swsContext = sws_getCachedContext(swsContext, codecCtx->width, codecCtx->height, codecCtx->pix_fmt, codecCtx->width, codecCtx->height, AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+	}
+	if (!outBuffer)
+		outBuffer = (uint8_t*)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB24, codecCtx->width, codecCtx->height, 1));
+	av_image_fill_arrays(frameN->data, frameN->linesize, outBuffer, AV_PIX_FMT_RGB24, codecCtx->width, codecCtx->height, 1);
+
+	sws_scale(swsContext, frame->data, frame->linesize, 0, frame->height, frameN->data, frameN->linesize);
+
+
+	videoFrameTexture->bind();
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, codecCtx->width, codecCtx->height, 0, GL_RGB, GL_UNSIGNED_BYTE, frameN->data[0]);
+	videoFrameTexture->release();
+
+
+	++count;
+	update();
+
+	
 	av_frame_free(&frame);
 }

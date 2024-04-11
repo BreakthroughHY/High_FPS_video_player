@@ -5,6 +5,7 @@
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
 #include <QTimer>
+#include <QOpenGLTexture>
 #include "data_singleton.h"
 
 extern "C"
@@ -59,20 +60,27 @@ private:
 
     unsigned int VBO, VAO;
 
-    float vertices[18] = {
-            1.0, 1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f,
-            -1.0f, 1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f,
-            -1.0f, -1.0f, 0.0f,
-            -1.0f, 1.0f, 0.0f
+    float vertices[30] = {
+            1.0, 1.0f, 0.0f, 1.0f, 1.0f,
+            1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+            -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+            -1.0f, 1.0f, 0.0f, 0.0f, 1.0f
     };
 
     struct SwsContext* swsContext = NULL;
-    int dst_linesize[4];
-    uint8_t* dst_data[4];
+    AVFrame* frameN = nullptr;
     uint8_t* outBuffer = NULL;
 
     unsigned int texture0;
+
+    //  ”∆µ÷°Œ∆¿ÌvideoFrame
+    QOpenGLTexture* videoFrameTexture;
+
+
+    QTimer* countTimer;
+    int count = 0;
 };
+
 

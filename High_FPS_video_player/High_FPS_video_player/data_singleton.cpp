@@ -2,6 +2,7 @@
 
 DataSingleton* DataSingleton::instance = nullptr;
 std::mutex DataSingleton::mutex;
+std::mutex DataSingleton::mutexPTS;
 
 // 获取DataSingleton唯一对象的方法
 DataSingleton& DataSingleton::getInstance()
@@ -33,7 +34,7 @@ bool DataSingleton::setFFmpegQueue(int vPNum, int aPNum, int vFNum, int aFNum)
             audioPacketQueue->setCapacity(aPNum);
 
         if (!videoFrameQueue) // 视频帧队列
-            videoFrameQueue = new FFmpegSafeQueue<AVFrame*>(vFNum);
+            videoFrameQueue = new FFmpegSafeQueue<Myframe*>(vFNum);
         else
             videoFrameQueue->setCapacity(vFNum);
 
@@ -51,7 +52,7 @@ bool DataSingleton::setFFmpegQueue(int vPNum, int aPNum, int vFNum, int aFNum)
 // FFmpeg队列的get函数返回值是引用
 FFmpegSafeQueue<AVPacket*>* DataSingleton::getVideoPacketQueue() { return videoPacketQueue; }
 FFmpegSafeQueue<AVPacket*>* DataSingleton::getAudioPacketQueue() { return audioPacketQueue; }
-FFmpegSafeQueue<AVFrame*>* DataSingleton::getVideoFrameQueue() { return videoFrameQueue; }
+FFmpegSafeQueue<Myframe*>* DataSingleton::getVideoFrameQueue() { return videoFrameQueue; }
 FFmpegSafeQueue<AVFrame*>* DataSingleton::getAudioFrameQueue() { return audioFrameQueue; }
 
 
@@ -105,4 +106,60 @@ void DataSingleton::setACodecCtx(AVCodecContext* aCodecCtx)
 AVCodecContext* DataSingleton::getACodecCtx()
 {
     return this->aCodecCtx;
+}
+
+// 视频时间基
+void DataSingleton::setvTimeBase(AVRational vTimeBase)
+{
+    this->vTimeBase.num = vTimeBase.num;
+    this->vTimeBase.den = vTimeBase.den;
+}
+AVRational DataSingleton::getvTimeBase()
+{
+    return this->vTimeBase;
+}
+
+// 音频时间基
+void DataSingleton::setaTimeBase(AVRational aTimeBase)
+{
+    this->aTimeBase.num = aTimeBase.num;
+    this->aTimeBase.den = aTimeBase.den;
+}
+AVRational DataSingleton::getaTimeBase()
+{
+    return this->aTimeBase;
+}
+
+// 可以播放的pts区间
+void DataSingleton::setPTS(double beforePTS, double currPTS)
+{
+    std::lock_guard<std::mutex> lock(mutexPTS);
+    this->beforePTS = beforePTS;
+    this->currPTS = currPTS;
+}
+void DataSingleton::getPTS(double& beforePTS, double& currPTS)
+{
+    std::lock_guard<std::mutex> lock(mutexPTS);
+    beforePTS = this->beforePTS;
+    currPTS = this->currPTS;
+}
+
+// openGL窗口比例
+void DataSingleton::setWdividedH(double WdividedH)
+{
+    this->WdividedH = WdividedH;
+}
+double DataSingleton::getWdividedH()
+{
+    return this->WdividedH;
+}
+
+// 视频帧率
+void DataSingleton::setFPSV(double FPSV)
+{
+    this->FPSV = FPSV;
+}
+double DataSingleton::getFPSV()
+{
+    return this->FPSV;
 }

@@ -3,6 +3,12 @@
 #include "thread_base.h"
 #include "data_singleton.h"
 
+extern "C"
+{
+#include <libswscale\swscale.h>
+#include "libavutil\imgutils.h"
+}
+
 class DecodeThread : public ThreadBase
 {
 public:
@@ -29,11 +35,18 @@ private:
     // 包队列
     FFmpegSafeQueue<AVPacket*>* packetQueue = nullptr;
     // 帧队列
-    FFmpegSafeQueue<AVFrame*>* frameQueue = nullptr;
+    FFmpegSafeQueue<Myframe*>* vframeQueue = nullptr;
+    FFmpegSafeQueue<AVFrame*>* aframeQueue = nullptr;
     // 解码器
     AVCodecContext* codecCtx = nullptr;
     // 包指针
     AVPacket* packet = nullptr;
     // 帧
     AVFrame* frame = nullptr;
+    Myframe* myFrame = nullptr;
+    // 视频转码需要的空间
+    int outBufferSize;
+    uint8_t* outBuffer = NULL;
+    // 视频转码结构体
+    struct SwsContext* swsContext = NULL;
 };

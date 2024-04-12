@@ -25,6 +25,12 @@ public:
 
     ~REOpenGLWidget();
 
+    // 设置属性
+    void setParameters();
+
+    // 开始渲染
+    void start();
+
 protected:
     // 虚函数需要重写
     void initializeGL() override;
@@ -43,13 +49,15 @@ private:
     // 全局唯一的数据对象 支持多线程访问
     DataSingleton& dataSingleton;
     // 帧队列
-    FFmpegSafeQueue<AVFrame*>* frameQueue = nullptr;
+    FFmpegSafeQueue<Myframe*>* frameQueue = nullptr;
     // 解码器
     AVCodecContext* codecCtx = nullptr;
     // 帧
-    AVFrame* frame = nullptr;
+    Myframe* myFrame = nullptr;
     // 播放视频帧的计时器
     QTimer* frameTimer;
+    // 可以播放的pts区间
+    double beforePTS = 0, currPTS = 0;
 
 
     // openGL
@@ -77,6 +85,8 @@ private:
 
     // 视频帧纹理videoFrame
     QOpenGLTexture* videoFrameTexture;
+    // 视频时间基
+    AVRational vTimeBase;
 
 
     QTimer* countTimer;

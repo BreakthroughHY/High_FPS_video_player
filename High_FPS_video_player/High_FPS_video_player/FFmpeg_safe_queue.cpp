@@ -108,3 +108,4 @@ void FFmpegSafeQueue<T>::clear()
 // 显式实例化，以便确保编译器生成所需的模板实例
 template class FFmpegSafeQueue<AVPacket*>;
 template class FFmpegSafeQueue<AVFrame*>;
+template class FFmpegSafeQueue<Myframe*>;

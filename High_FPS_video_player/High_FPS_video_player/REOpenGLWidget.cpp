@@ -13,14 +13,12 @@ REOpenGLWidget::REOpenGLWidget(QWidget* parent)
 	frameTimer->setTimerType(Qt::PreciseTimer);
 	countTimer->setTimerType(Qt::PreciseTimer);
 	// 定时间隔
-	frameTimer->setInterval(8);
+	frameTimer->setInterval(4);
 	countTimer->setInterval(1000);
 	// 设置循环计时
 	frameTimer->setSingleShot(false);
 	countTimer->setSingleShot(false);
 
-	frameTimer->start();
-	countTimer->start();
 	// 连接信号和槽
 	connectSignalSlots();
 
@@ -33,6 +31,26 @@ REOpenGLWidget::REOpenGLWidget(QWidget* parent)
 REOpenGLWidget::~REOpenGLWidget() 
 {
 	delete shaderArr;
+}
+
+// 设置属性
+void REOpenGLWidget::setParameters()
+{
+	codecCtx = dataSingleton.getVCodecCtx();
+	// 设置视频时间基
+	vTimeBase = dataSingleton.getvTimeBase();
+	// 设置pts
+	beforePTS = currPTS = 0;
+	// 定时间隔
+	frameTimer->setInterval((int)(1000 / dataSingleton.getFPSV()));
+	frameTimer->start();
+}
+
+// 开始渲染
+void REOpenGLWidget::start()
+{
+	frameTimer->start();
+	countTimer->start();
 }
 
 // 虚函数需要重写
@@ -112,29 +130,44 @@ void REOpenGLWidget::paintGL()
 
 void REOpenGLWidget::flush()
 {
-	frameQueue->waitAndPop(frame);
-	//frameQueue->tryPop(frame);
+	if (!myFrame)
+		frameQueue->waitAndPop(myFrame);
+	//frameQueue->tryPop(myFrame);
 
-	if (!codecCtx)
+	while (myFrame->pts * av_q2d(vTimeBase) < currPTS - 0.12)
 	{
-		codecCtx = dataSingleton.getVCodecCtx();
-		swsContext = sws_getCachedContext(swsContext, codecCtx->width, codecCtx->height, codecCtx->pix_fmt, codecCtx->width, codecCtx->height, AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+		av_freep(&myFrame->outBuffer);
+		delete myFrame;
+		frameQueue->waitAndPop(myFrame);
+		qDebug() << "dq";
 	}
-	if (!outBuffer)
-		outBuffer = (uint8_t*)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB24, codecCtx->width, codecCtx->height, 1));
-	av_image_fill_arrays(frameN->data, frameN->linesize, outBuffer, AV_PIX_FMT_RGB24, codecCtx->width, codecCtx->height, 1);
 
-	sws_scale(swsContext, frame->data, frame->linesize, 0, frame->height, frameN->data, frameN->linesize);
-
+	if (myFrame->pts * av_q2d(vTimeBase) > currPTS + 0.02)
+	{
+		//qDebug() << myFrame->pts * av_q2d(vTimeBase) << "    " << currPTS;
+		dataSingleton.getPTS(beforePTS, currPTS);
+		if (myFrame->pts * av_q2d(vTimeBase) > currPTS)
+			return;
+	}
 
 	videoFrameTexture->bind();
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, codecCtx->width, codecCtx->height, 0, GL_RGB, GL_UNSIGNED_BYTE, frameN->data[0]);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, codecCtx->width, codecCtx->height, 0, GL_RGB, GL_UNSIGNED_BYTE, myFrame->data[0]);
+
 	videoFrameTexture->release();
 
+
+
+	//av_q2d(vTimeBase)
+
+	//qDebug() << myFrame->pts * av_q2d(vTimeBase);
 
 	++count;
 	update();
 
-	
-	av_frame_free(&frame);
+
+	av_freep(&myFrame->outBuffer);
+	delete myFrame;
+	myFrame = nullptr;
 }
+

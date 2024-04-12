@@ -47,6 +47,10 @@ private:
 	FFmpegSafeQueue<AVFrame*>* frameQueue = nullptr;
 	// 帧
 	AVFrame* frame = nullptr;
+	// 音频时间基
+	AVRational aTimeBase;
+	// 可以播放的pts区间
+	double beforePTS = 0, currPTS = 0;
 
 
 	static unsigned int audioLen;

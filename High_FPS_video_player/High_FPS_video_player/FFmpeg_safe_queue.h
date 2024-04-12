@@ -13,6 +13,13 @@ extern "C"
 #include <libavcodec\avcodec.h>
 }
 
+typedef struct Myframe {
+	uint8_t* data[4];
+	int linesize[4];
+	int64_t pts;
+	uint8_t* outBuffer = NULL;
+}Myframe;
+
 template <typename T>
 class FFmpegSafeQueue
 {

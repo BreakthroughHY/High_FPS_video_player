@@ -35,6 +35,13 @@ Show::Show(QWidget *parent)
 Show::~Show()
 {}
 
+// 同步openGL中的数据
+void Show::setOpenGLParameters(double WdividedH)
+{
+	this->WdividedH = WdividedH;
+	this->ui.openGLWidget->setParameters();
+}
+
 // 绘制虚函数实现
 void Show::paintEvent(QPaintEvent* event)
 {

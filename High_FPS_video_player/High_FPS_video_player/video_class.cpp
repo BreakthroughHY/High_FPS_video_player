@@ -86,6 +86,38 @@ bool VideoClass::loadVideo(std::string videoPath)
 	dataSingleton.setVCodecCtx(vCodecCtx);
 	dataSingleton.setACodecCtx(aCodecCtx);
 
+	dataSingleton.setvTimeBase(formatCtx->streams[videoIndex]->time_base);
+	dataSingleton.setaTimeBase(formatCtx->streams[audioIndex]->time_base);
+
+	dataSingleton.setWdividedH(vCodecCtx->width * 1.0 / vCodecCtx->height);
+
+	AVRational frameRate = formatCtx->streams[videoIndex]->r_frame_rate;
+	dataSingleton.setFPSV(av_q2d(frameRate));
+
+
+	//int64_t duration = formatCtx->duration;
+
+	// 获取视频流的时间基
+	//AVRational timeBase = formatCtx->streams[videoIndex]->time_base;
+	//
+	//// 转换为实际时长（秒）
+	//double durationInSeconds = (double)formatCtx->streams[videoIndex]->duration * av_q2d(timeBase);
+
+	//std::cout << durationInSeconds << std::endl;
+	//std::cout << "num:" << timeBase.num << " den:" << timeBase.den << std::endl;
+
+	//AVRational timeBaseA = formatCtx->streams[audioIndex]->time_base;
+
+	//// 转换为实际时长（秒）
+	//double durationInSecondsA = (double)formatCtx->streams[audioIndex]->duration * av_q2d(timeBaseA);
+
+	//std::cout << durationInSecondsA << std::endl;
+	//std::cout << "num:" << timeBaseA.num << " den:" << timeBaseA.den << std::endl;
+
+
+
+	//std::cout << timeBase.num << std::endl;
+	//std::cout << "   " << vCodecCtx->time_base.num << std::endl;
 
 	return true;
 }

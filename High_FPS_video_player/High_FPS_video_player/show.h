@@ -17,6 +17,9 @@ public:
 	Show(QWidget *parent = nullptr);
 	~Show();
 
+	// 同步openGL中的数据
+	void setOpenGLParameters(double WdividedH);
+
 protected:
 	// 绘制虚函数实现
 	void paintEvent(QPaintEvent* event) override;

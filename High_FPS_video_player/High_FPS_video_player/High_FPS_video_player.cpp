@@ -278,6 +278,7 @@ void High_FPS_video_player::startFFmpeg()
     vDecodeThread->setParameters();
     aDecodeThread->setParameters();
     audioOutThread->setParameters();
+    this->ui.ShowWid->setOpenGLParameters(dataSingleton.getWdividedH());
 
     demuxThread->start();
     vDecodeThread->start();

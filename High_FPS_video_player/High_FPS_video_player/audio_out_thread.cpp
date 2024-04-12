@@ -22,6 +22,11 @@ AudioOutThread::~AudioOutThread()
 void AudioOutThread::setParameters()
 {
     codecCtx = dataSingleton.getACodecCtx();
+    // 设置时间基
+    aTimeBase = dataSingleton.getaTimeBase();
+    // 设置PTS
+    beforePTS = currPTS = 0;
+
     // 打开音频设备并配置音频参数
     want_spec.freq = codecCtx->sample_rate;
     want_spec.format = AUDIO_S16SYS;
@@ -65,6 +70,12 @@ void AudioOutThread::run()
     {
         frameQueue->waitAndPop(frame);
 
+        //std::cerr << frame->pts * av_q2d(aTimeBase) << std::endl;
+        beforePTS = currPTS;
+        currPTS = frame->pts * av_q2d(aTimeBase);
+
+        dataSingleton.setPTS(beforePTS, currPTS);
+
         // 进行音频重采样操作  
         if (swr_convert(au_convert_ctx, &converted_audio_data, codecCtx->frame_size, (const uint8_t**)frame->data, frame->nb_samples) < 0)
             std::cerr << "Failed to convert audio data" << std::endl;
@@ -74,7 +85,7 @@ void AudioOutThread::run()
             SDL_Delay(1);
 
         audioChunk = (unsigned char*)converted_audio_data;
-        audioPos = audioChunk;
+        audioPos = audioChunk; 
         audioLen = converted_audio_size;
     }
     SDL_PauseAudio(1);

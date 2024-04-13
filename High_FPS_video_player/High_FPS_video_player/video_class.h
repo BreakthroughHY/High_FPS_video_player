@@ -18,7 +18,7 @@ public:
 	~VideoClass();
 
 	// 加载本地视频
-	bool loadVideo(std::string videoPath);
+	bool loadVideo(QString videoPath);
 
 private:
 	// 全局唯一的数据对象 支持多线程访问

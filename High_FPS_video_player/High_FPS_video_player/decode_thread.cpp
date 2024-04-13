@@ -64,8 +64,6 @@ void DecodeThread::run()
 				{
 					// ´¦ÀíÊÓÆµ
 				case Types::VIDEO:
-					//frameQueue->push(frame);
-					//frame = av_frame_alloc();
 
 					myFrame = new Myframe;
 					outBuffer = (uint8_t*)av_malloc(outBufferSize);

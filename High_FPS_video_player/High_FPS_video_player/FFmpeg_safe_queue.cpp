@@ -35,7 +35,8 @@ bool FFmpegSafeQueue<T>::tryPop(T& item)
 	unique_lock<mutex> lock(m_mutex);
 
 	// 尝试取出数据如果队列为空直接返回false取出失败
-	if (m_queue.empty()) return false;
+	if (m_queue.empty())
+		return false;
 
 	// 取出数据
 	item = m_queue.front();
@@ -84,6 +85,14 @@ bool FFmpegSafeQueue<T>::setCapacity(int capacity)
 	return true;
 }
 
+// 清空队列的方法带锁确保线程安全
+template <typename T>
+void FFmpegSafeQueue<T>::clearMutex()
+{
+	unique_lock<mutex> lock(m_mutex);
+	this->clear(); // 调用私有不带锁的清空函数
+}
+
 // 队列是否为满
 template <typename T>
 bool FFmpegSafeQueue<T>::full()
@@ -93,14 +102,46 @@ bool FFmpegSafeQueue<T>::full()
 	return false;
 }
 
-// 清空队列的方法 （没加锁为了线程安全只能被加了锁的函数调用）
-template <typename T>
-void FFmpegSafeQueue<T>::clear()
+template <> // T = AVPacket*的特化函数
+void FFmpegSafeQueue<AVPacket*>::clear()
 {
+	AVPacket* packet = nullptr;
 	// 清空队列
 	while (!m_queue.empty())
+	{
+		packet = m_queue.front();
 		m_queue.pop();
+		av_packet_free(&packet);
+	}
+	// 尝试去激活一个生产线程，如果有的话
+	m_cond_push.notify_one();
+}
 
+template <> // T = AVFrame*的特化函数
+void FFmpegSafeQueue<AVFrame*>::clear()
+{
+	AVFrame* frame = nullptr;
+	while (!m_queue.empty())
+	{
+		frame = m_queue.front();
+		m_queue.pop();
+		av_frame_free(&frame);
+	}
+	// 尝试去激活一个生产线程，如果有的话
+	m_cond_push.notify_one();
+}
+
+template <> // T = Myframe*的特化函数
+void FFmpegSafeQueue<Myframe*>::clear()
+{
+	Myframe* myFrame = nullptr;
+	while (!m_queue.empty())
+	{
+		myFrame = m_queue.front();
+		m_queue.pop();
+		av_freep(&myFrame->outBuffer);
+		delete myFrame;
+	}
 	// 尝试去激活一个生产线程，如果有的话
 	m_cond_push.notify_one();
 }

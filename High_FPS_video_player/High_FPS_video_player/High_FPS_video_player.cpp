@@ -247,6 +247,8 @@ void High_FPS_video_player::connectSignalSlots()
     connect(ui.ShowWid, &Show::sig_enterBtnCloseVideoList, this, &High_FPS_video_player::do_btnCloseVideoList);
     // 连接ctr_bar中的全屏信号与主窗口中的全屏槽函数
     connect(ui.CtrlBarWid, &CtrBar::sig_fullScreen, this, &High_FPS_video_player::do_fullScreen);
+    // 连接播放列表中的item被点击的播放信号和主窗口中的对应槽函数
+    connect(ui.PlaylistWid, &PlaylListWid::sig_playItem, this, &High_FPS_video_player::playItem);
 
 
     // 自己连自己
@@ -273,17 +275,18 @@ void High_FPS_video_player::initFFmpeg()
 // 开启FFmpeg线程
 void High_FPS_video_player::startFFmpeg()
 {
-    videoClass->loadVideo("G:\\Python编程\\python项目\\PythonQt\\images\\xtl.mp4");
-    demuxThread->setParameters();
+    //videoClass->loadVideo("G:\\Python编程\\python项目\\PythonQt\\images\\xtl.mp4");
+    //videoClass->loadVideo("G:\\系统默认\\桌面\\新建文件夹 (4)\\(pCodecCtx-width  900  pCodecCtx-height).mkv");
+    /*demuxThread->setParameters();
     vDecodeThread->setParameters();
     aDecodeThread->setParameters();
     audioOutThread->setParameters();
-    this->ui.ShowWid->setOpenGLParameters(dataSingleton.getWdividedH());
+    this->ui.ShowWid->setOpenGLParameters(dataSingleton.getWdividedH());*/
 
-    demuxThread->start();
-    vDecodeThread->start();
-    aDecodeThread->start();
-    audioOutThread->start();
+    //demuxThread->start();
+    //vDecodeThread->start();
+    //aDecodeThread->start();
+    //audioOutThread->start();
 }
 
 // 窗口缩放处理(函数内处理的是鼠标样式的变化和判断当前鼠标位置是否具备改变窗口大小条件)
@@ -501,4 +504,21 @@ void High_FPS_video_player::do_fullScreen(bool flag)
         setWindowState(Qt::WindowNoState);
         ui.TitleWid->show();
     }
+}
+
+// 播放指定item中的视频
+void High_FPS_video_player::playItem(QString path, QString videoName)
+{
+    videoClass->loadVideo(path);
+    //videoClass->loadVideo("G:\\系统默认\\桌面\\新建文件夹 (4)\\(pCodecCtx-width  900  pCodecCtx-height).mkv");
+    demuxThread->setParameters();
+    vDecodeThread->setParameters();
+    aDecodeThread->setParameters();
+    audioOutThread->setParameters();
+    this->ui.ShowWid->setOpenGLParameters(dataSingleton.getWdividedH());
+
+    demuxThread->start();
+    vDecodeThread->start();
+    aDecodeThread->start();
+    audioOutThread->start();
 }

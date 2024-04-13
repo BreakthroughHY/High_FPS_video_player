@@ -41,7 +41,7 @@ private:
 	// 音频重采样上下文
 	SwrContext* au_convert_ctx = nullptr;
 	// 分配内存用于重采样后的音频数据
-	int converted_audio_size;
+	int converted_audio_size = -1;
 	uint8_t* converted_audio_data = nullptr;
 	// 帧队列
 	FFmpegSafeQueue<AVFrame*>* frameQueue = nullptr;

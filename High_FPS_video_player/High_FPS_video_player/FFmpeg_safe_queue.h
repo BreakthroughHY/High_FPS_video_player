@@ -37,6 +37,8 @@ public:
 	void waitAndPop(T& item);
 	// 设置容量大小
 	bool setCapacity(int capacity);
+	// 清空队列的方法带锁确保线程安全
+	void clearMutex();
 
 private:
 	// 禁止外部访问只能通过public中的函数间接调用，所以函数中不用使用lock

@@ -35,6 +35,8 @@ private:
 	void setStyle();
 	// 连接信号和槽
 	void connectSignalSlots();
+	// 设置openGL组件在Show中的位置
+	void setOpenGLInShowPos();
 
 signals:
 	// 向主窗口发信号设置CtrlBarWid位置

@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 {
     DataSingleton& d = DataSingleton::getInstance();
 
-    d.setFFmpegQueue(10, 10, 10, 10);
+    d.setFFmpegQueue(20, 10, 20, 10);
     QApplication a(argc, argv);
     High_FPS_video_player w;
     w.show();

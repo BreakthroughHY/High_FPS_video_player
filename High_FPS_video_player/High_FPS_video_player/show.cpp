@@ -40,6 +40,9 @@ void Show::setOpenGLParameters(double WdividedH)
 {
 	this->WdividedH = WdividedH;
 	this->ui.openGLWidget->setParameters();
+
+	// 设置openGL组件在Show中的位置
+	setOpenGLInShowPos();
 }
 
 // 绘制虚函数实现
@@ -52,19 +55,8 @@ void Show::paintEvent(QPaintEvent* event)
 // 大小改变虚函数
 void Show::resizeEvent(QResizeEvent* event)
 {
-	// 设置openGL窗口位置
-	double w = (double)width();
-	double h = (double)height();
-	if (w / h <= WdividedH)
-	{
-		int openGLH = w / WdividedH;
-		ui.openGLWidget->setGeometry(0, (h - openGLH) / 2, w, openGLH);
-	}
-	else
-	{
-		int openGLW = h * WdividedH;
-		ui.openGLWidget->setGeometry((w - openGLW) / 2, 0, openGLW, h);
-	}
+	// 设置openGL组件在Show中的位置
+	setOpenGLInShowPos();
 	
 	// 设置隐藏视频列表按钮位置
 	ui.btnCloseVideoList->move(width() - ui.btnCloseVideoList->width(), (height() - ui.btnCloseVideoList->height()) / 2);
@@ -155,6 +147,24 @@ void Show::connectSignalSlots()
 	connect(ui.btnCloseVideoList, &QPushButton::clicked, this, &Show::do_closeBtnVideoListClicked);
 	// 通过滑块改变音量
 	connect(ui.VolumeSlider, &QSlider::valueChanged, this, &Show::do_valueChanged);
+}
+
+// 设置openGL组件在Show中的位置
+void Show::setOpenGLInShowPos()
+{
+	// 设置openGL窗口位置
+	double w = (double)width();
+	double h = (double)height();
+	if (w / h <= WdividedH)
+	{
+		int openGLH = w / WdividedH;
+		ui.openGLWidget->setGeometry(0, (h - openGLH) / 2, w, openGLH);
+	}
+	else
+	{
+		int openGLW = h * WdividedH;
+		ui.openGLWidget->setGeometry((w - openGLW) / 2, 0, openGLW, h);
+	}
 }
 
 // 设置音量滑块位置的槽函数

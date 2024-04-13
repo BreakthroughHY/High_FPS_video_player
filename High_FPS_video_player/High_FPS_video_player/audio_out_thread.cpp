@@ -56,6 +56,8 @@ void AudioOutThread::setParameters()
 
     converted_audio_size = av_samples_get_buffer_size(nullptr, codecCtx->channels, codecCtx->frame_size, AV_SAMPLE_FMT_S16, 1);
 
+    if (converted_audio_data) // 不为空就销毁重新申请
+        av_freep(converted_audio_data); // 释放内存并将指针置为null
     converted_audio_data = (uint8_t*)av_malloc(converted_audio_size);
     if (!converted_audio_data) {
         std::cerr << "Failed to allocate memory for converted audio data" << std::endl;
@@ -68,13 +70,15 @@ void AudioOutThread::run()
     SDL_PauseAudio(0);
     while (isRunning())
     {
-        frameQueue->waitAndPop(frame);
+        //frameQueue->waitAndPop(frame); // 等待取出数据
+        if (!frameQueue->tryPop(frame)) // 尝试取出数据
+            continue;
 
-        //std::cerr << frame->pts * av_q2d(aTimeBase) << std::endl;
         beforePTS = currPTS;
         currPTS = frame->pts * av_q2d(aTimeBase);
 
-        dataSingleton.setPTS(beforePTS, currPTS);
+        dataSingleton.setPTS(beforePTS - 0.09, currPTS + 0.02); // 设置到人耳无法区别的区间
+        //dataSingleton.setPTS(beforePTS, currPTS); // 设置到人耳无法区别的区间
 
         // 进行音频重采样操作  
         if (swr_convert(au_convert_ctx, &converted_audio_data, codecCtx->frame_size, (const uint8_t**)frame->data, frame->nb_samples) < 0)

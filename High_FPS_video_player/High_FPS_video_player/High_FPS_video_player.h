@@ -80,6 +80,8 @@ private slots:
     void do_btnCloseVideoList(bool flag);
     // 全屏
     void do_fullScreen(bool flag);
+    // 播放指定item中的视频
+    void playItem(QString path, QString videoName);
 
 
 private:

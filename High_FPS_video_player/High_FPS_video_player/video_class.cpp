@@ -19,7 +19,7 @@ VideoClass::~VideoClass()
 }
 
 // 加载本地视频
-bool VideoClass::loadVideo(std::string videoPath)
+bool VideoClass::loadVideo(QString videoPath)
 {
 	if (formatCtx)
 	{
@@ -29,9 +29,10 @@ bool VideoClass::loadVideo(std::string videoPath)
 
 	formatCtx = avformat_alloc_context();
 
-	QString utf8Path = QString::fromLocal8Bit(videoPath.c_str()).toUtf8();
+	//QString utf8Path = QString::fromLocal8Bit(videoPath.c_str()).toUtf8();
 
-	if (avformat_open_input(&formatCtx, utf8Path.toStdString().c_str(), nullptr, nullptr) != 0)
+	if (avformat_open_input(&formatCtx, videoPath.toStdString().c_str(), nullptr, nullptr) != 0)
+	//if (avformat_open_input(&formatCtx, utf8Path.toStdString().c_str(), nullptr, nullptr) != 0)
 	{
 		std::cout << "视频文件打开失败！" << std::endl;
 		return false;
@@ -59,6 +60,12 @@ bool VideoClass::loadVideo(std::string videoPath)
 	}
 
 
+	if (vCodecCtx)
+	{
+		avcodec_free_context(&vCodecCtx);
+		vCodecCtx = avcodec_alloc_context3(NULL);
+	}
+
 	avcodec_parameters_to_context(vCodecCtx, formatCtx->streams[videoIndex]->codecpar);
 	const AVCodec* pCodecV = avcodec_find_decoder(vCodecCtx->codec_id);
 	if (pCodecV == NULL)
@@ -66,9 +73,14 @@ bool VideoClass::loadVideo(std::string videoPath)
 		std::cout << "没有发现视频解码器" << std::endl;
 		return false;
 	}
-
 	avcodec_open2(vCodecCtx, pCodecV, NULL);
 
+
+	if (aCodecCtx)
+	{
+		avcodec_free_context(&aCodecCtx);
+		aCodecCtx = avcodec_alloc_context3(NULL);
+	}
 	avcodec_parameters_to_context(aCodecCtx, formatCtx->streams[audioIndex]->codecpar);
 	const AVCodec* pCodecA = avcodec_find_decoder(aCodecCtx->codec_id);
 	if (pCodecA == NULL)
@@ -93,6 +105,7 @@ bool VideoClass::loadVideo(std::string videoPath)
 
 	AVRational frameRate = formatCtx->streams[videoIndex]->r_frame_rate;
 	dataSingleton.setFPSV(av_q2d(frameRate));
+
 
 
 	//int64_t duration = formatCtx->duration;

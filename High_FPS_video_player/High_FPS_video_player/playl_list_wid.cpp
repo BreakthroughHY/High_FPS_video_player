@@ -39,6 +39,18 @@ void PlaylListWid::connectSignalSlots()
 	connect(ui.btnLocal, &QPushButton::clicked, this, &PlaylListWid::do_btnLocal);
 	connect(ui.btnNetwork, &QPushButton::clicked, this, &PlaylListWid::do_btnNetwork);
 	connect(ui.btnAdd, &QPushButton::clicked, this, &PlaylListWid::do_btnAddClicked);
+	connect(ui.LocalVideoListWid, &QListWidget::itemClicked, this, &PlaylListWid::do_itemClicked);
+}
+
+// 事件过滤器虚函数
+bool PlaylListWid::eventFilter(QObject* obj, QEvent* event)
+{
+	if (obj == ui.LocalVideoListWid) // 处理点击本地视频item执行的操作
+	{
+
+	}
+
+	return QWidget::eventFilter(obj, event);
 }
 
 // 当前显示的视频列表的切换
@@ -82,14 +94,41 @@ void PlaylListWid::do_btnAddClicked()
 		for (auto ele : fileNames)
 		{
 			QFileInfo fileInfo(ele);
-			item =  new QListWidgetItem(fileInfo.fileName());
-			item->setData(Qt::UserRole, QVariant(ele));  // 存储视频路径
 
-			qDebug() << item->data(Qt::UserRole).toString();
+			QList<QListWidgetItem*> items = ui.LocalVideoListWid->findItems("*", Qt::MatchWildcard); // 查找所有项
 
-			ui.LocalVideoListWid->addItem(item);
+			bool flag = false;
+			for (QListWidgetItem* item : items) {
+				if (item->data(Qt::UserRole).toString() == ele)
+				{
+					flag = true;
+					break;
+				}
+			}
+			if (!flag)
+			{
+				item = new QListWidgetItem(fileInfo.fileName());
+				item->setData(Qt::UserRole, QVariant(ele));  // 存储视频路径
+
+				//qDebug() << item->data(Qt::UserRole).toString();
+
+				ui.LocalVideoListWid->addItem(item);
+			}
 		}
 
 	}
+}
+
+// 当QListWidget中的item被点击的时候执行的槽函数
+void PlaylListWid::do_itemClicked(QListWidgetItem* item)
+{
+	if (currItem == item)
+		return;
+	
+	// 向主窗口发射播放指定item中的内容
+	emit sig_playItem(item->data(Qt::UserRole).toString(), item->text());
+	//qDebug() << item->data(Qt::UserRole).toString() << "    " << item->text();
+
+	currItem = item;
 }
 

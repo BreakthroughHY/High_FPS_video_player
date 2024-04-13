@@ -44,6 +44,7 @@ void REOpenGLWidget::setParameters()
 	// 定时间隔
 	frameTimer->setInterval((int)(1000 / dataSingleton.getFPSV()));
 	frameTimer->start();
+	countTimer->start();
 }
 
 // 开始渲染
@@ -131,40 +132,36 @@ void REOpenGLWidget::paintGL()
 void REOpenGLWidget::flush()
 {
 	if (!myFrame)
-		frameQueue->waitAndPop(myFrame);
-	//frameQueue->tryPop(myFrame);
-
-	while (myFrame->pts * av_q2d(vTimeBase) < currPTS - 0.12)
 	{
+		//frameQueue->waitAndPop(myFrame); // 一定要取出一个帧
+		if (!frameQueue->tryPop(myFrame)) // 尝试取出一个帧
+		{
+			return;
+		}
+	}
+
+
+	while (myFrame->pts * av_q2d(vTimeBase) < beforePTS)
+	{
+		qDebug() << myFrame->pts * av_q2d(vTimeBase) << "dq" << beforePTS;
 		av_freep(&myFrame->outBuffer);
 		delete myFrame;
 		frameQueue->waitAndPop(myFrame);
-		qDebug() << "dq";
 	}
 
-	if (myFrame->pts * av_q2d(vTimeBase) > currPTS + 0.02)
+	if (myFrame->pts * av_q2d(vTimeBase) > currPTS)
 	{
-		//qDebug() << myFrame->pts * av_q2d(vTimeBase) << "    " << currPTS;
 		dataSingleton.getPTS(beforePTS, currPTS);
 		if (myFrame->pts * av_q2d(vTimeBase) > currPTS)
 			return;
 	}
 
 	videoFrameTexture->bind();
-
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, codecCtx->width, codecCtx->height, 0, GL_RGB, GL_UNSIGNED_BYTE, myFrame->data[0]);
-
 	videoFrameTexture->release();
 
-
-
-	//av_q2d(vTimeBase)
-
-	//qDebug() << myFrame->pts * av_q2d(vTimeBase);
-
 	++count;
-	update();
-
+	this->update();
 
 	av_freep(&myFrame->outBuffer);
 	delete myFrame;

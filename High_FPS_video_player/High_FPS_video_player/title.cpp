@@ -193,3 +193,9 @@ void Title::do_minBtnClicked()
 {
 	emit sig_MinBtnClicked();
 }
+
+// 设置窗口上方的视频标题
+void Title::do_setVideoName(QString videoName)
+{
+	ui.videoName->setText(videoName);
+}

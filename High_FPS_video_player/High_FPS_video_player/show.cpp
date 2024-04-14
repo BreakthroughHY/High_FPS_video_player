@@ -153,6 +153,8 @@ void Show::connectSignalSlots()
 	connect(ui.btnCloseVideoList, &QPushButton::clicked, this, &Show::do_closeBtnVideoListClicked);
 	// 通过滑块改变音量
 	connect(ui.VolumeSlider, &QSlider::valueChanged, this, &Show::do_valueChanged);
+	// 连接openGL中发送的秒数和自身的信号中转到主窗口sig_VideoPlayTimeTimeEdit
+	connect(ui.openGLWidget, &REOpenGLWidget::sig_VideoPlayTimeTimeEdit, this, &Show::sig_VideoPlayTimeTimeEdit);
 }
 
 // 设置openGL组件在Show中的位置

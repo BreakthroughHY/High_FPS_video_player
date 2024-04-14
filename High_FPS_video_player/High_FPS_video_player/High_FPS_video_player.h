@@ -68,6 +68,10 @@ signals:
     void sig_hideBtnCloseVideoList();
     // 向ctr_bar发送视频的总秒数
     void sig_SetVideoTotalTimeTimeEdit(int second);
+    // 通过中转向ctr_bar发送当前视频播放的位置
+    void sig_VideoPlayTimeTimeEdit(int second);
+    // 设置窗口上方的视频名
+    void sig_setVideoName(QString videoName);
     
 private slots:
     // 处理窗口移动的槽函数

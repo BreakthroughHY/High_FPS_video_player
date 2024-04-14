@@ -49,6 +49,8 @@ signals:
 	void sig_enterVolumeWid(bool flag);
 	// 向主窗口发信号传输
 	void sig_enterBtnCloseVideoList(bool flag);
+	// 通过中转向ctr_bar发送当前视频播放的位置
+	void sig_VideoPlayTimeTimeEdit(int second);
 
 public slots:
 	// 设置音量滑块位置的槽函数

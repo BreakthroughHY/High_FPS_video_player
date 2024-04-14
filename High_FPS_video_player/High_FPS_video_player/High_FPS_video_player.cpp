@@ -249,6 +249,8 @@ void High_FPS_video_player::connectSignalSlots()
     connect(ui.CtrlBarWid, &CtrBar::sig_fullScreen, this, &High_FPS_video_player::do_fullScreen);
     // 连接播放列表中的item被点击的播放信号和主窗口中的对应槽函数
     connect(ui.PlaylistWid, &PlaylListWid::sig_playItem, this, &High_FPS_video_player::playItem);
+    // 设置视频名称
+    connect(this, &High_FPS_video_player::sig_setVideoName, ui.TitleWid, &Title::do_setVideoName);
 
 
     // 自己连自己
@@ -260,7 +262,8 @@ void High_FPS_video_player::connectSignalSlots()
     connect(ui.CtrlBarWid, &CtrBar::sig_SetVolumeSliderPos, ui.ShowWid, &Show::do_SetVolumeSliderPos);
     // 连接videoClass类中发出设置视频总时长的信号和ctr_bar内的设置视频总时长的槽函数
     connect(this, &High_FPS_video_player::sig_SetVideoTotalTimeTimeEdit, ui.CtrlBarWid, &CtrBar::do_SetVideoTotalTimeTimeEdit);
-
+    // sig_VideoPlayTimeTimeEdit
+    connect(ui.ShowWid, &Show::sig_VideoPlayTimeTimeEdit, ui.CtrlBarWid, &CtrBar::do_SetVideoPlayTimeTimeEdit);
 }
 
 // 初始化FFmpeg相关的线程和设置
@@ -515,6 +518,7 @@ void High_FPS_video_player::playItem(QString path, QString videoName)
     videoClass->loadVideo(path);
 
     emit sig_SetVideoTotalTimeTimeEdit(videoClass->getTotalVideoDuration());
+    emit sig_setVideoName(videoName);
 
     //videoClass->loadVideo("G:\\系统默认\\桌面\\新建文件夹 (4)\\(pCodecCtx-width  900  pCodecCtx-height).mkv");
     demuxThread->setParameters();

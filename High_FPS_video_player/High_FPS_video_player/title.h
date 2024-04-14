@@ -59,6 +59,8 @@ public slots:
 	void do_maxBtnClicked();
 	// 最小化按钮对应的槽
 	void do_minBtnClicked();
+	// 设置窗口上方的视频标题
+	void do_setVideoName(QString videoName);
 
 private:
 	// 记录窗口最大化状态

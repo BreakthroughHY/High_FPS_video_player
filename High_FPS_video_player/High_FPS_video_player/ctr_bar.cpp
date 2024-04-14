@@ -123,15 +123,29 @@ void CtrBar::do_FullScreenBtnClicked()
 // 设置视频总时长  槽函数
 void CtrBar::do_SetVideoTotalTimeTimeEdit(int second)
 {
-	//qDebug() << "do_SetVideoTotalTimeTimeEdit    " << second;
+	ui.PlaySlider->setMinimum(0);
+	ui.PlaySlider->setMaximum(second);
 	// 计算小时、分钟和秒
 	int hours = second / 3600;
 	int minutes = (second % 3600) / 60;
 	int seconds = second % 60;
 
-	// 创建一个 QTime 对象
-	QTime time(hours, minutes, seconds);
+	time.setHMS(hours, minutes, seconds);
 
 	ui.VideoTotalTimeTimeEdit->setTime(time);
 
+}
+
+// 设置视频当前时长
+void CtrBar::do_SetVideoPlayTimeTimeEdit(int second)
+{
+	ui.PlaySlider->setValue(second);
+	// 计算小时、分钟和秒
+	int hours = second / 3600;
+	int minutes = (second % 3600) / 60;
+	int seconds = second % 60;
+
+	time.setHMS(hours, minutes, seconds);
+
+	ui.VideoPlayTimeTimeEdit->setTime(time);
 }

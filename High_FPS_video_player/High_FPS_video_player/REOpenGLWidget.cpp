@@ -171,7 +171,8 @@ void REOpenGLWidget::flush()
 		if (myFrame->pts * av_q2d(vTimeBase) > currPTS)
 			return;
 	}
-	qDebug() << myFrame->pts * av_q2d(vTimeBase);
+
+	sig_VideoPlayTimeTimeEdit((int)(myFrame->pts * av_q2d(vTimeBase)));
 	videoFrameTexture->bind();
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, codecCtx->width, codecCtx->height, 0, GL_RGB, GL_UNSIGNED_BYTE, myFrame->data[0]);
 	videoFrameTexture->release();

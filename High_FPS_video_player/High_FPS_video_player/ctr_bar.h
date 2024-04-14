@@ -46,6 +46,8 @@ public slots:
 	void do_FullScreenBtnClicked();
 	// 设置视频总时长
 	void do_SetVideoTotalTimeTimeEdit(int second);
+	// 设置视频当前时长
+	void do_SetVideoPlayTimeTimeEdit(int second);
 
 private:
 	// 字体图标
@@ -54,6 +56,8 @@ private:
 	bool playing = false;
 	// 是全屏
 	bool sig_FullScreen = false;
+	// 时间对象
+	QTime time;
 
 private:
 	Ui::CtrBarClass ui;

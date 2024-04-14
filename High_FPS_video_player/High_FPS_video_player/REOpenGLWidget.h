@@ -41,6 +41,10 @@ private:
     // 连接信号和槽
     void connectSignalSlots();
 
+signals:
+    // 通过中转向ctr_bar发送当前视频播放的位置
+    void sig_VideoPlayTimeTimeEdit(int second);
+
 private slots:
     // 处理窗口移动的槽函数
     void flush();

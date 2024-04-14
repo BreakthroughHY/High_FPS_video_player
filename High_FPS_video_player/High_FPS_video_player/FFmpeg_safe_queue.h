@@ -28,7 +28,8 @@ public:
 
 	FFmpegSafeQueue(int capacity);
 
-
+	// 尝试入队
+	bool tryPush(const T& item);
 	// 入队
 	void push(const T& item);
 	// 尝试出队

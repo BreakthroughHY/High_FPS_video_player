@@ -119,3 +119,19 @@ void CtrBar::do_FullScreenBtnClicked()
 		emit sig_fullScreen(sig_FullScreen);
 	}
 }
+
+// 设置视频总时长  槽函数
+void CtrBar::do_SetVideoTotalTimeTimeEdit(int second)
+{
+	//qDebug() << "do_SetVideoTotalTimeTimeEdit    " << second;
+	// 计算小时、分钟和秒
+	int hours = second / 3600;
+	int minutes = (second % 3600) / 60;
+	int seconds = second % 60;
+
+	// 创建一个 QTime 对象
+	QTime time(hours, minutes, seconds);
+
+	ui.VideoTotalTimeTimeEdit->setTime(time);
+
+}

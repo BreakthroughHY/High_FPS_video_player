@@ -258,6 +258,8 @@ void High_FPS_video_player::connectSignalSlots()
     // 组件连接组件
     // ctr_bar中的播放空间大小改变发射信号连接show中的设置声音滑块位置的槽函数
     connect(ui.CtrlBarWid, &CtrBar::sig_SetVolumeSliderPos, ui.ShowWid, &Show::do_SetVolumeSliderPos);
+    // 连接videoClass类中发出设置视频总时长的信号和ctr_bar内的设置视频总时长的槽函数
+    connect(this, &High_FPS_video_player::sig_SetVideoTotalTimeTimeEdit, ui.CtrlBarWid, &CtrBar::do_SetVideoTotalTimeTimeEdit);
 
 }
 
@@ -509,7 +511,11 @@ void High_FPS_video_player::do_fullScreen(bool flag)
 // 播放指定item中的视频
 void High_FPS_video_player::playItem(QString path, QString videoName)
 {
+    reInitState();
     videoClass->loadVideo(path);
+
+    emit sig_SetVideoTotalTimeTimeEdit(videoClass->getTotalVideoDuration());
+
     //videoClass->loadVideo("G:\\系统默认\\桌面\\新建文件夹 (4)\\(pCodecCtx-width  900  pCodecCtx-height).mkv");
     demuxThread->setParameters();
     vDecodeThread->setParameters();
@@ -520,5 +526,22 @@ void High_FPS_video_player::playItem(QString path, QString videoName)
     demuxThread->start();
     vDecodeThread->start();
     aDecodeThread->start();
+    ui.ShowWid->startOrStop(true); // 开启openGL中播放视频画面的计时器
     audioOutThread->start();
+}
+
+// 恢复FFmpeg为初始状态 关闭线程 清空容器
+void High_FPS_video_player::reInitState()
+{
+    demuxThread->stop();
+    vDecodeThread->stop();
+    aDecodeThread->stop();
+    audioOutThread->stop();
+    ui.ShowWid->startOrStop(false); // 关闭openGL中播放视频画面的计时器
+
+    // 清空队列
+    dataSingleton.getVideoPacketQueue()->clearMutex();
+    dataSingleton.getAudioPacketQueue()->clearMutex();
+    dataSingleton.getVideoFrameQueue()->clearMutex();
+    dataSingleton.getAudioFrameQueue()->clearMutex();
 }

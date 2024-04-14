@@ -57,7 +57,7 @@ void AudioOutThread::setParameters()
     converted_audio_size = av_samples_get_buffer_size(nullptr, codecCtx->channels, codecCtx->frame_size, AV_SAMPLE_FMT_S16, 1);
 
     if (converted_audio_data) // 不为空就销毁重新申请
-        av_freep(converted_audio_data); // 释放内存并将指针置为null
+        av_free(converted_audio_data); // 释放内存
     converted_audio_data = (uint8_t*)av_malloc(converted_audio_size);
     if (!converted_audio_data) {
         std::cerr << "Failed to allocate memory for converted audio data" << std::endl;
@@ -93,6 +93,7 @@ void AudioOutThread::run()
         audioLen = converted_audio_size;
     }
     SDL_PauseAudio(1);
+    SDL_CloseAudio();
 }
 
 // SDL2 音频回调函数

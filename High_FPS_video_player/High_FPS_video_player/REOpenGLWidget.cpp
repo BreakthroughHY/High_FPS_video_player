@@ -43,15 +43,25 @@ void REOpenGLWidget::setParameters()
 	beforePTS = currPTS = 0;
 	// 定时间隔
 	frameTimer->setInterval((int)(1000 / dataSingleton.getFPSV()));
-	frameTimer->start();
-	countTimer->start();
+	//frameTimer->start();
+	//countTimer->start();
 }
 
 // 开始渲染
-void REOpenGLWidget::start()
+void REOpenGLWidget::startOrStop(bool palyState)
 {
-	frameTimer->start();
-	countTimer->start();
+	if (palyState && !this->palyState)
+	{
+		this->palyState = palyState;
+		frameTimer->start();
+		//countTimer->start();
+	}
+	else if (!palyState && this->palyState)
+	{
+		this->palyState = palyState;
+		frameTimer->stop();
+		//countTimer->stop();
+	}
 }
 
 // 虚函数需要重写
@@ -143,19 +153,25 @@ void REOpenGLWidget::flush()
 
 	while (myFrame->pts * av_q2d(vTimeBase) < beforePTS)
 	{
-		qDebug() << myFrame->pts * av_q2d(vTimeBase) << "dq" << beforePTS;
+		//qDebug() << myFrame->pts * av_q2d(vTimeBase) << "dq" << beforePTS;
 		av_freep(&myFrame->outBuffer);
 		delete myFrame;
-		frameQueue->waitAndPop(myFrame);
+		//frameQueue->waitAndPop(myFrame);
+		if (!frameQueue->tryPop(myFrame)) // 尝试取出一个帧
+		{
+			myFrame = nullptr;
+			return;
+		}
 	}
 
 	if (myFrame->pts * av_q2d(vTimeBase) > currPTS)
 	{
+		//qDebug() << myFrame->pts * av_q2d(vTimeBase) << "                         cs" << currPTS;
 		dataSingleton.getPTS(beforePTS, currPTS);
 		if (myFrame->pts * av_q2d(vTimeBase) > currPTS)
 			return;
 	}
-
+	qDebug() << myFrame->pts * av_q2d(vTimeBase);
 	videoFrameTexture->bind();
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, codecCtx->width, codecCtx->height, 0, GL_RGB, GL_UNSIGNED_BYTE, myFrame->data[0]);
 	videoFrameTexture->release();

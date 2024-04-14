@@ -19,6 +19,8 @@ public:
 
 	// 同步openGL中的数据
 	void setOpenGLParameters(double WdividedH);
+	// 主窗口对象无法直接访问openGL对象通过show中转下 
+	void startOrStop(bool palyState);
 
 protected:
 	// 绘制虚函数实现

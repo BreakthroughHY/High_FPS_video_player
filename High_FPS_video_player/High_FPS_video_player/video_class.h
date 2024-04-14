@@ -19,6 +19,8 @@ public:
 
 	// 加载本地视频
 	bool loadVideo(QString videoPath);
+	// 获取当前视频的总时长
+	int getTotalVideoDuration();
 
 private:
 	// 全局唯一的数据对象 支持多线程访问
@@ -30,4 +32,7 @@ private:
 	unsigned videoIndex, audioIndex;
 	// 解码器
 	AVCodecContext* vCodecCtx = nullptr, * aCodecCtx = nullptr;
+
+	// 当前播放视频的总时长
+	int totalVideoDuration = -1;
 };

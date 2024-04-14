@@ -66,6 +66,8 @@ signals:
     void sig_hideVolumeSlider();
     // 立刻隐藏视频列表关闭按钮
     void sig_hideBtnCloseVideoList();
+    // 向ctr_bar发送视频的总秒数
+    void sig_SetVideoTotalTimeTimeEdit(int second);
     
 private slots:
     // 处理窗口移动的槽函数
@@ -82,6 +84,9 @@ private slots:
     void do_fullScreen(bool flag);
     // 播放指定item中的视频
     void playItem(QString path, QString videoName);
+    // 恢复FFmpeg为初始状态 关闭线程 清空容器
+    void reInitState();
+
 
 
 private:

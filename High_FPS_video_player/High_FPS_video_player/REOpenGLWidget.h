@@ -29,7 +29,7 @@ public:
     void setParameters();
 
     // 开始渲染
-    void start();
+    void startOrStop(bool palyState);
 
 protected:
     // 虚函数需要重写
@@ -58,6 +58,8 @@ private:
     QTimer* frameTimer;
     // 可以播放的pts区间
     double beforePTS = 0, currPTS = 0;
+    // 当前的播放状态
+    bool palyState = false;
 
 
     // openGL

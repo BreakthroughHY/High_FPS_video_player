@@ -44,6 +44,8 @@ public slots:
 	void do_PlayOrPauseBtnClicked();
 	// 处理全屏按钮
 	void do_FullScreenBtnClicked();
+	// 设置视频总时长
+	void do_SetVideoTotalTimeTimeEdit(int second);
 
 private:
 	// 字体图标

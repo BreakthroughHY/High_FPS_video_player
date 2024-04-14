@@ -106,6 +106,8 @@ bool VideoClass::loadVideo(QString videoPath)
 	AVRational frameRate = formatCtx->streams[videoIndex]->r_frame_rate;
 	dataSingleton.setFPSV(av_q2d(frameRate));
 
+	AVRational timeBaseA = formatCtx->streams[audioIndex]->time_base;
+	totalVideoDuration = (int)formatCtx->streams[audioIndex]->duration * av_q2d(timeBaseA);
 
 
 	//int64_t duration = formatCtx->duration;
@@ -121,7 +123,7 @@ bool VideoClass::loadVideo(QString videoPath)
 
 	//AVRational timeBaseA = formatCtx->streams[audioIndex]->time_base;
 
-	//// 转换为实际时长（秒）
+	////// 转换为实际时长（秒）
 	//double durationInSecondsA = (double)formatCtx->streams[audioIndex]->duration * av_q2d(timeBaseA);
 
 	//std::cout << durationInSecondsA << std::endl;
@@ -133,4 +135,10 @@ bool VideoClass::loadVideo(QString videoPath)
 	//std::cout << "   " << vCodecCtx->time_base.num << std::endl;
 
 	return true;
+}
+
+// 获取当前视频的总时长
+int VideoClass::getTotalVideoDuration()
+{
+	return this->totalVideoDuration;
 }

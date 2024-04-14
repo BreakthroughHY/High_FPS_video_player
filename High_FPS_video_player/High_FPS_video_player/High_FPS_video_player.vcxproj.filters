@@ -160,9 +160,6 @@
     <ClInclude Include="data_singleton.h">
       <Filter>Header Files\FFmpeg</Filter>
     </ClInclude>
-    <ClInclude Include="video_class.h">
-      <Filter>Header Files\FFmpeg</Filter>
-    </ClInclude>
     <ClInclude Include="thread_base.h">
       <Filter>Header Files\FFmpeg\thread</Filter>
     </ClInclude>
@@ -177,6 +174,9 @@
     </ClInclude>
     <ClInclude Include="shader_arr.h">
       <Filter>Header Files\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="video_class.h">
+      <Filter>Header Files\FFmpeg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

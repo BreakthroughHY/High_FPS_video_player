@@ -11,7 +11,7 @@ public:
 
 	void start();
 
-	void stop();
+	void stop(); 
 
 protected:
 	virtual void run() = 0; // 纯虚函数  子类必须重写

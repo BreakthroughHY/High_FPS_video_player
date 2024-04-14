@@ -45,6 +45,12 @@ void Show::setOpenGLParameters(double WdividedH)
 	setOpenGLInShowPos();
 }
 
+// 主窗口对象无法直接访问openGL对象,通过show中转下 
+void Show::startOrStop(bool palyState)
+{
+	ui.openGLWidget->startOrStop(palyState);
+}
+
 // 绘制虚函数实现
 void Show::paintEvent(QPaintEvent* event)
 {

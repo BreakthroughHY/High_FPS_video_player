@@ -10,6 +10,24 @@ FFmpegSafeQueue<T>::FFmpegSafeQueue(int capacity)
 	this->capacity = capacity;
 }
 
+// 尝试入队
+template <typename T>
+bool FFmpegSafeQueue<T>::tryPush(const T& item)
+{
+	unique_lock<mutex> lock(m_mutex);
+
+	if (full()) // 队列为满就直接push失败
+		return false;
+
+	// 插入新的数据
+	m_queue.push(item);
+
+	// 尝试去激活一个消费线程，如果有的话
+	m_cond_pop.notify_one();
+
+	return true;
+}
+
 // 入队
 template <typename T>
 void FFmpegSafeQueue<T>::push(const T& item)

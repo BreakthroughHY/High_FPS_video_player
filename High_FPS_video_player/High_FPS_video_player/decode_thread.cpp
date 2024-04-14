@@ -49,14 +49,30 @@ void DecodeThread::run()
 {
 	while (isRunning())
 	{
-		packetQueue->waitAndPop(packet);
+		//packetQueue->waitAndPop(packet);
+		if (!packetQueue->tryPop(packet))
+			continue;
 
 		avcodec_send_packet(codecCtx, packet);
 
 		av_packet_free(&packet);
 
-		while (true)
+		while (isRunning())
 		{
+			if (myFrame)
+			{
+				if (!vframeQueue->tryPush(myFrame))
+				{
+					continue;
+				}
+				else
+				{
+					myFrame = nullptr;
+					av_frame_free(&frame);
+					frame = av_frame_alloc();
+				}
+			}
+
 			int ret = avcodec_receive_frame(codecCtx, frame);
 			if (ret == 0)
 			{
@@ -74,7 +90,16 @@ void DecodeThread::run()
 					myFrame->outBuffer = outBuffer;
 					myFrame->pts = frame->pts;
 
-					vframeQueue->push(myFrame);
+					//vframeQueue->push(myFrame);
+					if (!vframeQueue->tryPush(myFrame))
+					{
+						continue;
+					}
+					else
+					{
+						myFrame = nullptr;
+					}
+
 					av_frame_free(&frame);
 					frame = av_frame_alloc();
 
@@ -91,5 +116,11 @@ void DecodeThread::run()
 				break;
 			}
 		}
+	}
+	if (myFrame)
+	{
+		av_freep(&myFrame->outBuffer);
+		delete myFrame;
+		myFrame = nullptr;
 	}
 }

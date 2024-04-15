@@ -251,6 +251,9 @@ void High_FPS_video_player::connectSignalSlots()
     connect(ui.PlaylistWid, &PlaylListWid::sig_playItem, this, &High_FPS_video_player::playItem);
     // 设置视频名称
     connect(this, &High_FPS_video_player::sig_setVideoName, ui.TitleWid, &Title::do_setVideoName);
+    // 连接ctr_bar中播放暂停按钮发出的信号和主窗口中的处理
+    connect(ui.CtrlBarWid, &CtrBar::sig_playing, this, &High_FPS_video_player::do_playing);
+    connect(this, &High_FPS_video_player::sig_playing, ui.CtrlBarWid, &CtrBar::do_playing);
 
 
     // 自己连自己
@@ -514,11 +517,13 @@ void High_FPS_video_player::do_fullScreen(bool flag)
 // 播放指定item中的视频
 void High_FPS_video_player::playItem(QString path, QString videoName)
 {
+
     reInitState();
     videoClass->loadVideo(path);
 
     emit sig_SetVideoTotalTimeTimeEdit(videoClass->getTotalVideoDuration());
     emit sig_setVideoName(videoName);
+    emit sig_playing();
 
     //videoClass->loadVideo("G:\\系统默认\\桌面\\新建文件夹 (4)\\(pCodecCtx-width  900  pCodecCtx-height).mkv");
     demuxThread->setParameters();
@@ -548,4 +553,20 @@ void High_FPS_video_player::reInitState()
     dataSingleton.getAudioPacketQueue()->clearMutex();
     dataSingleton.getVideoFrameQueue()->clearMutex();
     dataSingleton.getAudioFrameQueue()->clearMutex();
+}
+
+// 处理ctr_bar发送的当前播放状态
+void High_FPS_video_player::do_playing(bool playing)
+{
+    if (playing)
+    {
+        ui.ShowWid->startOrStop(true); // 关闭openGL中播放视频画面的计时器
+        //audioOutThread->start();
+    }
+    else
+    {
+        //audioOutThread->stop();
+        ui.ShowWid->startOrStop(false); // 关闭openGL中播放视频画面的计时器
+    }
+
 }

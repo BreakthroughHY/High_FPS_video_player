@@ -7,6 +7,7 @@
 #include <QFontDatabase>
 #include <QTimer>
 #include "ui_show.h"
+#include "audio_out_thread.h"
 
 
 class Show : public QWidget

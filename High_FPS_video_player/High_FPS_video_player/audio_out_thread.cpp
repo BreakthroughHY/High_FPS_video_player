@@ -67,6 +67,7 @@ void AudioOutThread::setParameters()
 
 void AudioOutThread::run()
 {
+
     SDL_PauseAudio(0);
     while (isRunning())
     {
@@ -111,4 +112,10 @@ void AudioOutThread::audio_callback(void* udata, Uint8* stream, int len)
 
     audioPos += len;
     audioLen -= len;
+}
+
+// …Ë÷√“Ù¡ø
+void AudioOutThread::setVolume(int volume_)
+{
+    volume = volume_;
 }

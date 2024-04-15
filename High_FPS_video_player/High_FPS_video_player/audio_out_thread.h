@@ -23,6 +23,8 @@ public:
 
 	// SDL2 音频回调函数
 	static void audio_callback(void* udata, Uint8* stream, int len);
+	// 设置音量
+	static void setVolume(int volume_);
 
 protected:
 	void run() override; // 告诉编译器重写父类虚函数

@@ -245,4 +245,5 @@ void Show::do_hideBtnCloseVideoList()
 void Show::do_valueChanged(int value)
 {
 	ui.VolumeLabel->setText(QString::number(value) + "%");
+	AudioOutThread::setVolume((int)(value * 128.0 / 100));
 }

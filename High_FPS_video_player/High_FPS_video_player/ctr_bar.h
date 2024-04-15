@@ -38,6 +38,8 @@ signals:
 	void sig_SetVolumeSliderShowHide(bool flag);
 	// 全屏信号
 	void sig_fullScreen(bool flag);
+	// 向主窗口发送播放状态
+	void sig_playing(bool playing);
 
 public slots:
 	// 播放和暂停按钮对应的槽
@@ -48,6 +50,8 @@ public slots:
 	void do_SetVideoTotalTimeTimeEdit(int second);
 	// 设置视频当前时长
 	void do_SetVideoPlayTimeTimeEdit(int second);
+	// 处理播放新视频是播放按钮的状态
+	void do_playing();
 
 private:
 	// 字体图标

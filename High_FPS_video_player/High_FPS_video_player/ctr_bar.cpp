@@ -94,11 +94,13 @@ void CtrBar::do_PlayOrPauseBtnClicked()
 	if (playing)
 	{
 		playing = false;
+		emit sig_playing(playing);
 		ui.PlayOrPauseBtn->setText(QChar(0xe570));
 	}
 	else
 	{
 		playing = true;
+		emit sig_playing(playing);
 		ui.PlayOrPauseBtn->setText(QChar(0xe694));
 	}
 }
@@ -148,4 +150,11 @@ void CtrBar::do_SetVideoPlayTimeTimeEdit(int second)
 	time.setHMS(hours, minutes, seconds);
 
 	ui.VideoPlayTimeTimeEdit->setTime(time);
+}
+
+// 处理播放新视频是播放按钮的状态
+void CtrBar::do_playing()
+{
+	playing = true;
+	ui.PlayOrPauseBtn->setText(QChar(0xe694));
 }

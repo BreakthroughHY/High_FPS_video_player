@@ -72,6 +72,8 @@ signals:
     void sig_VideoPlayTimeTimeEdit(int second);
     // 设置窗口上方的视频名
     void sig_setVideoName(QString videoName);
+    // 向tar_bar发送播放状态
+    void sig_playing();
     
 private slots:
     // 处理窗口移动的槽函数
@@ -90,7 +92,8 @@ private slots:
     void playItem(QString path, QString videoName);
     // 恢复FFmpeg为初始状态 关闭线程 清空容器
     void reInitState();
-
+    // 处理ctr_bar发送的当前播放状态
+    void do_playing(bool playing);
 
 
 private:

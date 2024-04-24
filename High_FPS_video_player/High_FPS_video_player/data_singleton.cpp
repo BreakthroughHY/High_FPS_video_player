@@ -1,20 +1,23 @@
 #include "data_singleton.h"
 
 DataSingleton* DataSingleton::instance = nullptr;
+std::once_flag DataSingleton::once;
 std::mutex DataSingleton::mutex;
 std::mutex DataSingleton::mutexPTS;
 
 // 获取DataSingleton唯一对象的方法
 DataSingleton& DataSingleton::getInstance()
 {
-    if (instance == nullptr)
+    /*if (instance == nullptr)
     {
         std::lock_guard<std::mutex> lock(mutex);
         if (instance == nullptr)
         {
             instance = new DataSingleton();
         }
-    }
+    }*/
+    std::call_once(once, &DataSingleton::init);
+
     return *instance;
 }
 

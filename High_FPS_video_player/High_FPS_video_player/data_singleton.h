@@ -86,8 +86,14 @@ private:
 private:
 	// 直接私有不让用
 	DataSingleton() {};
+	// 创建单例
+	static void init()
+	{
+		instance = new DataSingleton();
+	}
 
 	static DataSingleton* instance;
+	static std::once_flag once;
 	static std::mutex mutex;
 	static std::mutex mutexPTS;
 };
